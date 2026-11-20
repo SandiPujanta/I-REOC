@@ -7,7 +7,6 @@
  *   - Spesifikasi alat: model, firmware, kapasitas, jaringan
  *   - Tentang I-REOC: deskripsi singkat
  *   - Tombol aksi: Kalibrasi Ulang Sensor
- *   - (tambahan) Menu: Ubah Password, Logout
  */
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert, StyleSheet } from 'react-native';
@@ -82,9 +81,7 @@ const ProfileScreen = ({ navigation }) => {
   //   ABOUT_TEXT                          → deskripsi I-REOC
   //   handleCalibrate()                   → tombol "Kalibrasi Ulang Sensor"
   //   isCalibratingLoading                → loading state tombol kalibrasi
-  //   navigation.navigate(ROUTES.CHANGE_PASSWORD) → ubah password
   //   navigation.navigate(ROUTES.SETTINGS)        → pengaturan
-  //   handleLogout()                      → tombol logout
   // ─────────────────────────────────────────────────────────────────────────────
 
   return (
@@ -113,9 +110,6 @@ const ProfileScreen = ({ navigation }) => {
       {/* Menu navigasi */}
       <TouchableOpacity onPress={() => navigation.navigate(ROUTES.SETTINGS)}>
         <Text>Pengaturan</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(ROUTES.CHANGE_PASSWORD)}>
-        <Text>Ubah Password</Text>
       </TouchableOpacity>
     </ScrollView>
   );

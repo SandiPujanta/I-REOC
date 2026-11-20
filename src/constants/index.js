@@ -59,7 +59,6 @@ export const ROUTES = {
   // Stack screens
   NOTIFICATION: 'Notification',
   SETTINGS: 'Settings',
-  CHANGE_PASSWORD: 'ChangePassword',
   BATCH_DETAIL: 'BatchDetail',
 };
 

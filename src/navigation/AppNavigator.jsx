@@ -1,11 +1,9 @@
 // AppNavigator — stack utama (tab + stack screens)
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import MainTabNavigator from './MainTabNavigator';
 import NotificationScreen from '../screens/main/NotificationScreen';
 import SettingsScreen from '../screens/main/SettingsScreen';
-import ChangePasswordScreen from '../screens/main/ChangePasswordScreen';
 import BatchDetailScreen from '../screens/main/BatchDetailScreen';
 import { ROUTES, COLORS } from '../constants';
 
@@ -44,11 +42,6 @@ const AppNavigator = () => {
         name={ROUTES.SETTINGS}
         component={SettingsScreen}
         options={{ title: 'Pengaturan' }}
-      />
-      <Stack.Screen
-        name={ROUTES.CHANGE_PASSWORD}
-        component={ChangePasswordScreen}
-        options={{ title: 'Ubah Password' }}
       />
     </Stack.Navigator>
   );
