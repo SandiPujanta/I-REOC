@@ -12,6 +12,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ROUTES, COLORS } from '../../constants';
+import { phases } from '../../data/phases';
+import { sensors as sensorData } from '../../data/sensors';
+import { batches } from '../../data/batches';
+import { batchAktif } from '../../data/batches';
+import { device } from '../../data/device';
 
 // ─── Struktur data mesin (akan dari API/WebSocket nanti) ─────────────────────
 const INITIAL_MACHINE_STATE = {
@@ -43,117 +48,109 @@ const INITIAL_LAST_BATCH = {
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
+
 const DashboardScreen = ({ navigation }) => {
-  const user = { name: 'Pengguna Demo' };
 
-  const [machine, setMachine] = useState(INITIAL_MACHINE_STATE);
-  const [sensors, setSensors] = useState(INITIAL_SENSOR_SUMMARY);
-  const [lastBatch, setLastBatch] = useState(INITIAL_LAST_BATCH);
-  const [refreshing, setRefreshing] = useState(false);
-  const [isLoadingToggle, setIsLoadingToggle] = useState(false);
+  // State simulasi mesin
+  const [berjalan, setBerjalan] = useState(true);
 
-  // ── Ambil data dari API saat mount ──────────────────────────────────────────
-  useEffect(() => {
-    fetchDashboardData();
-    // TODO: subscribe WebSocket/MQTT untuk data real-time sensor
-    // return () => unsubscribeWebSocket();
-  }, []);
+  // Mencari fase mesin berdasarkan status berjalan
+  const faseMesin = phases.find(
+    (p) => p.id === (berjalan ? 'HEATING' : 'IDLE')
+  );
 
-  const fetchDashboardData = async () => {
-    try {
-      // TODO: ganti dengan pemanggilan API nyata
-      // const [machineRes, sensorRes, batchRes] = await Promise.all([
-      //   api.get('/machine/status', token),
-      //   api.get('/sensor/latest', token),
-      //   api.get('/batch/latest', token),
-      // ]);
-      // setMachine(machineRes.data);
-      // setSensors(sensorRes.data);
-      // setLastBatch(batchRes.data);
-    } catch (error) {
-      console.error('fetchDashboardData error:', error);
-    }
+  // Mengambil sensor yang ditampilkan di Dashboard
+  const sensorBeranda = sensorData.filter(
+    (sensor) => sensor.diBeranda
+  );
+
+  // Mengambil batch selesai terbaru
+  const batchTerakhir = batches[0];
+
+  // Mengambil informasi pengguna
+  const user = device.pengguna;
+
+  // Fungsi Start / Stop
+  const handleMachineToggle = () => {
+    setBerjalan((prev) => !prev);
   };
 
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await fetchDashboardData();
-    setRefreshing(false);
-  }, []);
-
-  // ── Toggle Start / Stop mesin ────────────────────────────────────────────────
-  const handleMachineToggle = async () => {
-    try {
-      setIsLoadingToggle(true);
-      const nextState = !machine.isRunning;
-
-      // TODO: kirim perintah ke API/IoT
-      // await api.post('/machine/control', { command: nextState ? 'start' : 'stop' }, token);
-
-      // Update state lokal (sementara, nanti dari response API)
-      setMachine((prev) => ({
-        ...prev,
-        isRunning: nextState,
-        phaseName: nextState ? 'Pemanasan' : 'Siap (Idle)',
-        phaseNumber: nextState ? 2 : 0,
-      }));
-      setSensors((prev) => ({
-        ...prev,
-        temperature: nextState ? 54 : 28,
-      }));
-    } catch (error) {
-      console.error('handleMachineToggle error:', error);
-    } finally {
-      setIsLoadingToggle(false);
-    }
+  // Fungsi navigasi
+  const goToSensor = () => {
+    navigation.navigate(ROUTES.SENSOR);
   };
 
-  // ── Navigasi ─────────────────────────────────────────────────────────────────
-  const goToSensor = () => navigation.navigate(ROUTES.SENSOR);
-  const goToHistory = () => navigation.navigate(ROUTES.HISTORY);
-  const goToNotification = () => navigation.navigate(ROUTES.NOTIFICATION);
+  const goToHistory = () => {
+    navigation.navigate(ROUTES.HISTORY);
+  };
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // TODO: Bangun UI di sini menggunakan data:
-  //   machine.isRunning        → state mesin (true/false)
-  //   machine.phaseName        → nama fase ("Pemanasan", "Idle", dsb.)
-  //   machine.phaseNumber      → "Fase 2 / 4"
-  //   machine.deviceId         → "IREOC-V2-001"
-  //   machine.mode             → badge "Mode Simulasi"
-  //   sensors.temperature      → suhu reaktor (°C)
-  //   sensors.tempStatus       → "Optimal"
-  //   sensors.weight           → bobot sampah (kg)
-  //   sensors.humidity         → kelembapan (%)
-  //   sensors.power            → daya pemanas (Watt)
-  //   sensors.em4Dose          → dosis EM4 (ml)
-  //   lastBatch.type           → jenis sampah terakhir
-  //   lastBatch.date           → tanggal batch
-  //   lastBatch.duration       → durasi
-  //   lastBatch.resultKg       → hasil kompos (kg)
-  //   lastBatch.initialKg      → bobot awal (kg)
-  //   handleMachineToggle()    → fungsi Start/Stop mesin
-  //   isLoadingToggle          → loading state tombol toggle
-  //   goToSensor()             → navigasi ke tab Sensor
-  //   goToHistory()            → navigasi ke tab Riwayat
-  //   goToNotification()       → navigasi ke Notifikasi
-  //   user.name                → nama pengguna
-  // ─────────────────────────────────────────────────────────────────────────────
+  const goToNotification = () => {
+    navigation.navigate(ROUTES.NOTIFICATION);
+  };
 
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
-      {/* TODO: Bangun UI di sini */}
-      <Text>DashboardScreen — bangun UI Anda di sini</Text>
-      <Text>machine.isRunning: {String(machine.isRunning)}</Text>
-      <Text>sensors.temperature: {sensors.temperature}°C</Text>
-      <TouchableOpacity onPress={handleMachineToggle}>
-        <Text>{machine.isRunning ? 'Stop' : 'Mulai'}</Text>
+    <ScrollView style={styles.container}>
+
+      <Text>Dashboard I-REOC</Text>
+
+      <Text>Pengguna: {user.nama}</Text>
+
+      <Text>Perangkat: {device.id}</Text>
+
+      <Text>
+        Status Mesin: {faseMesin.nama}
+      </Text>
+
+      <Text>
+        Fase: {faseMesin.fase} / 3
+      </Text>
+
+      <Text>
+        Suhu Reaktor: {faseMesin.suhuSimulasi} °C
+      </Text>
+
+      <Text>
+        Berat Saat Ini: {batchAktif.beratSekarang} kg
+      </Text>
+
+      <Text>Informasi Sensor</Text>
+
+      {sensorBeranda.map((sensor) => (
+        <View key={sensor.id}>
+          <Text>
+            {sensor.nama}: {sensor.nilai} {sensor.satuan}
+          </Text>
+        </View>
+      ))}
+
+      <TouchableOpacity onPress={goToSensor}>
+        <Text>Buka Sensor</Text>
       </TouchableOpacity>
+
+      <Text>Riwayat Terakhir</Text>
+
+      <Text>{batchTerakhir.jenis}</Text>
+
+      <Text>{batchTerakhir.tanggal}</Text>
+
+      <TouchableOpacity onPress={goToHistory}>
+        <Text>Buka Riwayat</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleMachineToggle}>
+        <Text>
+          {berjalan ? 'Stop Mesin' : 'Mulai Mesin'}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={goToNotification}>
+        <Text>Buka Notifikasi</Text>
+      </TouchableOpacity>
+
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
