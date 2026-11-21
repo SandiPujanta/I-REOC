@@ -1,13 +1,4 @@
-/**
- * DashboardScreen — Beranda (Tab 1)
- *
- * Konten dari HTML Dashboard.html:
- *   - Header: avatar + nama alat + tombol notifikasi
- *   - Status dekomposisi: fase aktif + nomor fase
- *   - Hero card: suhu reaktor + bobot sampah + tombol Start/Stop mesin
- *   - Daftar sensor ringkas: Kelembapan, Daya Pemanas, Bioaktivator EM4
- *   - Riwayat terakhir: 1 batch terakhir
- */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,7 +9,8 @@ import { batches } from '../../data/batches';
 import { batchAktif } from '../../data/batches';
 import { device } from '../../data/device';
 
-// ─── Struktur data mesin (akan dari API/WebSocket nanti) ─────────────────────
+import HeroCard from '../../component/dashboard/HeroCard.jsx';
+
 const INITIAL_MACHINE_STATE = {
   isRunning: true,
   phaseName: 'Pemanasan',    // nama fase saat ini
@@ -97,21 +89,12 @@ const DashboardScreen = ({ navigation }) => {
 
       <Text>Perangkat: {device.id}</Text>
 
-      <Text>
-        Status Mesin: {faseMesin.nama}
-      </Text>
-
-      <Text>
-        Fase: {faseMesin.fase} / 3
-      </Text>
-
-      <Text>
-        Suhu Reaktor: {faseMesin.suhuSimulasi} °C
-      </Text>
-
-      <Text>
-        Berat Saat Ini: {batchAktif.beratSekarang} kg
-      </Text>
+      <HeroCard
+        fase={faseMesin}
+        berat={batchAktif.beratSekarang}
+        berjalan={berjalan}
+        onToggle={handleMachineToggle}
+      />
 
       <Text>Informasi Sensor</Text>
 
@@ -135,12 +118,6 @@ const DashboardScreen = ({ navigation }) => {
 
       <TouchableOpacity onPress={goToHistory}>
         <Text>Buka Riwayat</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleMachineToggle}>
-        <Text>
-          {berjalan ? 'Stop Mesin' : 'Mulai Mesin'}
-        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={goToNotification}>
