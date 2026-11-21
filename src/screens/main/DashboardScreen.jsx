@@ -9,7 +9,8 @@ import { batches } from '../../data/batches';
 import { batchAktif } from '../../data/batches';
 import { device } from '../../data/device';
 
-import HeroCard from '../../component/dashboard/HeroCard.jsx';
+import HeroCard from '../../component/dashboard/HeroCard';
+import SensorRow from '../../component/dashboard/SensorRow';
 
 const INITIAL_MACHINE_STATE = {
   isRunning: true,
@@ -99,11 +100,11 @@ const DashboardScreen = ({ navigation }) => {
       <Text>Informasi Sensor</Text>
 
       {sensorBeranda.map((sensor) => (
-        <View key={sensor.id}>
-          <Text>
-            {sensor.nama}: {sensor.nilai} {sensor.satuan}
-          </Text>
-        </View>
+        <SensorRow
+          key={sensor.id}
+          sensor={sensor}
+          onPress={goToSensor}
+        />
       ))}
 
       <TouchableOpacity onPress={goToSensor}>
