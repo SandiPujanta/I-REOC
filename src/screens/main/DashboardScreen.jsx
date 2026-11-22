@@ -13,6 +13,7 @@ import { device } from '../../data/device';
 import HeroCard from '../../component/dashboard/HeroCard';
 import SensorRow from '../../component/dashboard/SensorRow';
 import RecentBatchCard from '../../component/dashboard/RecentBatchCard';
+import ActuatorControls from '../../component/dashboard/ActuatorControls';
 
 const DashboardScreen = ({ navigation }) => {
   const [berjalan, setBerjalan] = useState(true);
@@ -147,6 +148,25 @@ const DashboardScreen = ({ navigation }) => {
             onToggle={handleMachineToggle}
           />
         )}
+
+        {/* KONTROL AKTUATOR */}
+        <View style={styles.sectionContainer}>
+
+          <View style={styles.sectionHeader}>
+            <View>
+              <Text style={styles.sectionTitle}>
+                Kontrol Alat
+              </Text>
+
+              <Text style={styles.sectionSubtitle}>
+                Pengaturan komponen perangkat I-REOC
+              </Text>
+            </View>
+          </View>
+
+          <ActuatorControls />
+
+        </View>
 
         {/* INFORMASI SENSOR */}
         <View style={styles.sectionContainer}>
