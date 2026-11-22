@@ -1,141 +1,445 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl, StyleSheet, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { ROUTES, COLORS } from '../../constants';
+import { ROUTES, COLORS, SIZES } from '../../constants';
 import { phases } from '../../data/phases';
-import { sensors as sensorData } from '../../data/sensors';
+import { sensors } from '../../data/sensors';
 import { batches } from '../../data/batches';
 import { batchAktif } from '../../data/batches';
 import { device } from '../../data/device';
 
 import HeroCard from '../../component/dashboard/HeroCard';
 import SensorRow from '../../component/dashboard/SensorRow';
-
-const INITIAL_MACHINE_STATE = {
-  isRunning: true,
-  phaseName: 'Pemanasan',    // nama fase saat ini
-  phaseNumber: 2,            // nomor fase (dari 4)
-  totalPhases: 4,
-  deviceId: 'IREOC-V2-001',
-  deviceName: 'I-REOC Dekomposer',
-  mode: 'Mode Simulasi',
-};
-
-const INITIAL_SENSOR_SUMMARY = {
-  temperature: 54,     // °C — DS18B20
-  humidity: 58,        // % — DHT22
-  power: 180,          // Watt — PZEM-004T
-  weight: 2.45,        // kg saat ini — HX711
-  em4Dose: 45,         // ml — dosis bioaktivator
-  tempStatus: 'Optimal',
-};
-
-const INITIAL_LAST_BATCH = {
-  id: 1,
-  type: 'Sayur & Buah',
-  date: '3 Nov 2026',
-  duration: '30 jam',
-  resultKg: 0.9,
-  initialKg: 3.2,
-};
-
-// ─── Component ────────────────────────────────────────────────────────────────
+import RecentBatchCard from '../../component/dashboard/RecentBatchCard';
 
 const DashboardScreen = ({ navigation }) => {
-
-  // State simulasi mesin
   const [berjalan, setBerjalan] = useState(true);
 
-  // Mencari fase mesin berdasarkan status berjalan
+  // Mencari kondisi mesin berdasarkan state
   const faseMesin = phases.find(
     (p) => p.id === (berjalan ? 'HEATING' : 'IDLE')
   );
 
-  // Mengambil sensor yang ditampilkan di Dashboard
-  const sensorBeranda = sensorData.filter(
+  // Mengambil informasi sensor untuk Dashboard
+  const sensorBeranda = sensors.filter(
     (sensor) => sensor.diBeranda
   );
 
   // Mengambil batch selesai terbaru
   const batchTerakhir = batches[0];
 
-  // Mengambil informasi pengguna
+  // Mengambil informasi pengguna dan perangkat
   const user = device.pengguna;
+  const deviceId = device.id;
 
-  // Fungsi Start / Stop
+  // Toggle Start / Stop mesin
   const handleMachineToggle = () => {
     setBerjalan((prev) => !prev);
   };
 
-  // Fungsi navigasi
+  // Navigasi Sensor
   const goToSensor = () => {
     navigation.navigate(ROUTES.SENSOR);
   };
 
+  // Navigasi Riwayat
   const goToHistory = () => {
     navigation.navigate(ROUTES.HISTORY);
   };
 
+  // Navigasi Detail Batch
+  const goToBatchDetail = () => {
+    if (!batchTerakhir) return;
+
+    navigation.navigate(ROUTES.BATCH_DETAIL, {
+      batchId: batchTerakhir.id,
+    });
+  };
+
+  // Navigasi Notifikasi
   const goToNotification = () => {
     navigation.navigate(ROUTES.NOTIFICATION);
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView
+      style={styles.safeArea}
+      edges={['top']}
+    >
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
 
-      <Text>Dashboard I-REOC</Text>
+        {/* HEADER */}
+        <View style={styles.header}>
 
-      <Text>Pengguna: {user.nama}</Text>
+          <View style={styles.brandContainer}>
 
-      <Text>Perangkat: {device.id}</Text>
+            <View style={styles.logoContainer}>
+              <Ionicons
+                name="leaf"
+                size={25}
+                color={COLORS.secondary}
+              />
+            </View>
 
-      <HeroCard
-        fase={faseMesin}
-        berat={batchAktif.beratSekarang}
-        berjalan={berjalan}
-        onToggle={handleMachineToggle}
-      />
+            <View style={styles.brandInfo}>
+              <Text style={styles.deviceName}>
+                I-REOC Dekomposer
+              </Text>
 
-      <Text>Informasi Sensor</Text>
+              <Text style={styles.deviceId}>
+                {deviceId}
+              </Text>
+            </View>
 
-      {sensorBeranda.map((sensor) => (
-        <SensorRow
-          key={sensor.id}
-          sensor={sensor}
-          onPress={goToSensor}
-        />
-      ))}
+          </View>
 
-      <TouchableOpacity onPress={goToSensor}>
-        <Text>Buka Sensor</Text>
-      </TouchableOpacity>
+          <Pressable
+            style={styles.notificationButton}
+            onPress={goToNotification}
+            android_ripple={{ color: COLORS.outline }}
+            accessibilityRole="button"
+            accessibilityLabel="Buka notifikasi"
+          >
+            <Ionicons
+              name="notifications-outline"
+              size={23}
+              color={COLORS.primary}
+            />
+          </Pressable>
 
-      <Text>Riwayat Terakhir</Text>
+        </View>
 
-      <Text>{batchTerakhir.jenis}</Text>
+        {/* INFORMASI PENGGUNA */}
+        <View style={styles.greetingContainer}>
 
-      <Text>{batchTerakhir.tanggal}</Text>
+          <View style={styles.greetingInfo}>
+            <Text style={styles.greetingLabel}>
+              Selamat datang,
+            </Text>
 
-      <TouchableOpacity onPress={goToHistory}>
-        <Text>Buka Riwayat</Text>
-      </TouchableOpacity>
+            <Text style={styles.userName}>
+              {user.nama}
+            </Text>
+          </View>
 
-      <TouchableOpacity onPress={goToNotification}>
-        <Text>Buka Notifikasi</Text>
-      </TouchableOpacity>
+          <View style={styles.simulationBadge}>
+            <View style={styles.simulationDot} />
 
-    </ScrollView>
+            <Text style={styles.simulationText}>
+              Mode Simulasi
+            </Text>
+          </View>
+
+        </View>
+
+        {/* HERO CARD */}
+        {faseMesin && (
+          <HeroCard
+            fase={faseMesin}
+            berat={batchAktif.beratSekarang}
+            berjalan={berjalan}
+            onToggle={handleMachineToggle}
+          />
+        )}
+
+        {/* INFORMASI SENSOR */}
+        <View style={styles.sectionContainer}>
+
+          <View style={styles.sectionHeader}>
+
+            <View>
+              <Text style={styles.sectionTitle}>
+                Informasi Sensor
+              </Text>
+
+              <Text style={styles.sectionSubtitle}>
+                Kondisi parameter perangkat
+              </Text>
+            </View>
+
+            <Pressable
+              onPress={goToSensor}
+              style={styles.seeAllButton}
+            >
+              <Text style={styles.seeAllText}>
+                Lihat Semua
+              </Text>
+
+              <Ionicons
+                name="chevron-forward"
+                size={15}
+                color={COLORS.secondary}
+              />
+            </Pressable>
+
+          </View>
+
+          <View style={styles.sensorList}>
+            {sensorBeranda.map((sensor) => (
+              <SensorRow
+                key={sensor.id}
+                sensor={sensor}
+                onPress={goToSensor}
+              />
+            ))}
+          </View>
+
+          {sensorBeranda.length === 0 && (
+            <Text style={styles.emptyText}>
+              Data sensor belum tersedia.
+            </Text>
+          )}
+
+        </View>
+
+        {/* RIWAYAT TERAKHIR */}
+        <View style={styles.sectionContainer}>
+
+          <View style={styles.sectionHeader}>
+
+            <View>
+              <Text style={styles.sectionTitle}>
+                Riwayat Terakhir
+              </Text>
+
+              <Text style={styles.sectionSubtitle}>
+                Hasil pengolahan sebelumnya
+              </Text>
+            </View>
+
+            <Pressable
+              onPress={goToHistory}
+              style={styles.seeAllButton}
+            >
+              <Text style={styles.seeAllText}>
+                Lihat Semua
+              </Text>
+
+              <Ionicons
+                name="chevron-forward"
+                size={15}
+                color={COLORS.secondary}
+              />
+            </Pressable>
+
+          </View>
+
+          {batchTerakhir ? (
+            <RecentBatchCard
+              batch={batchTerakhir}
+              onPress={goToBatchDetail}
+            />
+          ) : (
+            <Text style={styles.emptyText}>
+              Belum ada riwayat pengolahan.
+            </Text>
+          )}
+
+        </View>
+
+        {/* FOOTER */}
+        <View style={styles.footer}>
+          <Ionicons
+            name="hardware-chip-outline"
+            size={15}
+            color={COLORS.onSurfaceVariant}
+          />
+
+          <Text style={styles.footerText}>
+            I-REOC Dekomposer • Mode Simulasi
+          </Text>
+        </View>
+
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
+// ==========================================
+// 4. STYLE DASHBOARD
+// ==========================================
 
 const styles = StyleSheet.create({
+
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.surface,
+  },
+
   container: {
     flex: 1,
     backgroundColor: COLORS.surface,
   },
-  // TODO: tambah styles sesuai desain Anda
+
+  content: {
+    paddingHorizontal: SIZES.medium,
+    paddingTop: SIZES.small,
+    paddingBottom: SIZES.xxLarge,
+    gap: SIZES.large,
+  },
+
+  // HEADER
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  brandContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SIZES.small,
+  },
+
+  logoContainer: {
+    width: 46,
+    height: 46,
+    borderRadius: 14,
+    backgroundColor: COLORS.secondaryContainer,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  brandInfo: {
+    gap: 3,
+  },
+
+  deviceName: {
+    fontSize: SIZES.medium,
+    fontWeight: '700',
+    color: COLORS.primary,
+  },
+
+  deviceId: {
+    fontSize: SIZES.xSmall,
+    color: COLORS.onSurfaceVariant,
+  },
+
+  notificationButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: COLORS.surfaceVariant,
+    borderWidth: 1,
+    borderColor: COLORS.outline,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+
+  // GREETING
+  greetingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: SIZES.small,
+  },
+
+  greetingInfo: {
+    gap: 3,
+  },
+
+  greetingLabel: {
+    fontSize: SIZES.small,
+    color: COLORS.onSurfaceVariant,
+  },
+
+  userName: {
+    fontSize: SIZES.large,
+    fontWeight: '700',
+    color: COLORS.primary,
+  },
+
+  simulationBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: COLORS.secondaryContainer,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 20,
+  },
+
+  simulationDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 5,
+    backgroundColor: COLORS.success,
+  },
+
+  simulationText: {
+    fontSize: SIZES.xSmall,
+    color: COLORS.onSecondaryContainer,
+    fontWeight: '600',
+  },
+
+  // SECTION
+  sectionContainer: {
+    gap: SIZES.small,
+  },
+
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 8,
+  },
+
+  sectionTitle: {
+    fontSize: SIZES.large,
+    fontWeight: '700',
+    color: COLORS.primary,
+  },
+
+  sectionSubtitle: {
+    fontSize: SIZES.xSmall,
+    color: COLORS.onSurfaceVariant,
+    marginTop: 4,
+  },
+
+  seeAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    paddingVertical: 6,
+  },
+
+  seeAllText: {
+    color: COLORS.secondary,
+    fontSize: SIZES.xSmall,
+    fontWeight: '700',
+  },
+
+  sensorList: {
+    gap: 0,
+  },
+
+  emptyText: {
+    fontSize: SIZES.small,
+    color: COLORS.onSurfaceVariant,
+    paddingVertical: SIZES.medium,
+  },
+
+  // FOOTER
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 6,
+    paddingTop: SIZES.small,
+  },
+
+  footerText: {
+    fontSize: SIZES.xSmall,
+    color: COLORS.onSurfaceVariant,
+  },
+
 });
 
 export default DashboardScreen;

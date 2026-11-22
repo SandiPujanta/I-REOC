@@ -87,7 +87,7 @@ const HistoryScreen = ({ navigation }) => {
   }, []);
 
   const handleBatchPress = (batch) => {
-    navigation.navigate(ROUTES.BATCH_DETAIL, { batch });
+    navigation.navigate(ROUTES.BATCH_DETAIL, { batchId: batch.id });
   };
 
   // Helper: hitung % susut per batch
