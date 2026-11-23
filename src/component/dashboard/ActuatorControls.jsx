@@ -166,7 +166,6 @@ const ActuatorControls = () => {
                     Matikan Semua
                 </Text>
             </TouchableOpacity>
-
         </View>
     );
 };

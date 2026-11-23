@@ -55,12 +55,14 @@ export const batchAktif = {
     id: 5,
     jenis: 'Campuran Sisa Organik',
     tanggal: '20 Nov 2026',
-    durasiJam: 18,
     beratAwal: 3.8,
-    beratAkhir: null,
     beratSekarang: 2.45,
+    beratAkhir: null,
+
+    // Data tren berat simulasi
+    riwayatBerat: [3.8, 3.6, 3.3, 3.1, 2.9, 2.7, 2.45],
+
     energiKwh: 5.8,
     suhuPuncak: 54.2,
-    catatan: 'Proses pengolahan masih berlangsung.',
     status: 'aktif',
 };

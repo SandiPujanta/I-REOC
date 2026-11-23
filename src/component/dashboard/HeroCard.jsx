@@ -1,117 +1,102 @@
-import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, } from 'react-native';
+
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../../constants';
 
-// Komponen HeroCard
 const HeroCard = ({
     fase,
     berat,
     berjalan,
     onToggle,
 }) => {
-    const suhu = fase?.suhuSimulasi ?? 0;
-    const namaFase = fase?.nama ?? 'Tidak diketahui';
+
+    const suhu = fase?.suhuSimulasi ?? null;
+    const namaFase = fase?.nama ?? 'Menunggu proses';
     const nomorFase = fase?.fase ?? 0;
 
+    const progress = Math.min(
+        Math.max((nomorFase / 3) * 100, 0),
+        100
+    );
+
     return (
-        <View style={styles.card}>
+        <View style={styles.hero}>
 
-            {/* Header Status Mesin */}
+            {/* STATE MACHINE HEADER */}
             <View style={styles.header}>
-                <View>
-                    <Text style={styles.labelStatus}>
-                        STATUS DEKOMPOSISI
-                    </Text>
-
-                    <Text style={styles.namaFase}>
-                        {namaFase}
-                    </Text>
-
-                    <Text style={styles.fase}>
-                        Fase {nomorFase} / 3
-                    </Text>
-                </View>
+                <Text style={styles.heroLabel}>
+                    STATE MACHINE
+                </Text>
 
                 <View style={[
                     styles.statusBadge,
-                    !berjalan && styles.statusIdle,
+                    !berjalan && styles.statusBadgeIdle,
                 ]}>
                     <View style={[
                         styles.statusDot,
                         !berjalan && styles.statusDotIdle,
                     ]} />
 
-                    <Text style={styles.statusText}>
-                        {berjalan ? 'Berjalan' : 'Siaga'}
+                    <Text style={[
+                        styles.statusText,
+                        !berjalan && styles.statusTextIdle,
+                    ]}>
+                        {berjalan ? 'BERJALAN' : 'SIAGA'}
                     </Text>
                 </View>
             </View>
 
-            {/* Informasi Suhu dan Berat */}
-            <View style={styles.infoContainer}>
-
-                <View style={styles.infoCard}>
-                    <Ionicons
-                        name="thermometer-outline"
-                        size={22}
-                        color={COLORS.secondary}
-                    />
-
-                    <Text style={styles.infoLabel}>
-                        Suhu Reaktor
-                    </Text>
-
-                    <Text style={styles.infoValue}>
-                        {suhu}°C
-                    </Text>
-                </View>
-
-                <View style={styles.infoCard}>
-                    <Ionicons
-                        name="scale-outline"
-                        size={22}
-                        color={COLORS.secondary}
-                    />
-
-                    <Text style={styles.infoLabel}>
-                        Bobot Sampah
-                    </Text>
-
-                    <Text style={styles.infoValue}>
-                        {Number(berat ?? 0).toFixed(2)} kg
-                    </Text>
-                </View>
-
-            </View>
-
-            {/* Tombol Start / Stop */}
-            <TouchableOpacity
-                style={styles.button}
-                onPress={onToggle}
-                activeOpacity={0.8}
-            >
-                <Ionicons
-                    name={berjalan ? 'stop-circle-outline' : 'play-circle-outline'}
-                    size={20}
-                    color={COLORS.secondary}
-                />
-
-                <Text style={styles.buttonText}>
-                    {berjalan ? 'Stop Mesin' : 'Mulai Mesin'}
+            {/* CURRENT PHASE */}
+            <View style={styles.phaseContainer}>
+                <Text style={styles.phaseName}>
+                    {namaFase}
                 </Text>
-            </TouchableOpacity>
 
+                <Text style={styles.phaseNumber}>
+                    Tahap {nomorFase} dari 3
+                </Text>
+            </View>
+
+            {/* PHASE PROGRESS */}
+            <View style={styles.progressBackground}>
+                <View
+                    style={[
+                        styles.progressFill,
+                        { width: `${progress}%` },
+                    ]}
+                />
+            </View>
+
+            {/* TEMPERATURE */}
+            <View style={styles.temperatureContainer}>
+                <Text style={styles.temperatureLabel}>
+                    Suhu Reaktor
+                </Text>
+
+                <Text style={styles.temperatureValue}>
+                    {suhu !== null ? suhu : '—'}
+                    <Text style={styles.temperatureUnit}>
+                        °C
+                    </Text>
+                </Text>
+            </View>
+
+            <Text style={styles.sensorInfo}>
+                Data simulasi · Sensor DS18B20
+            </Text>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    card: {
-        backgroundColor: COLORS.secondary,
+
+    hero: {
+        backgroundColor: COLORS.primary,
         borderRadius: 20,
-        padding: SIZES.large,
-        gap: SIZES.large,
+        padding: 20,
+        marginTop: 12,
+        gap: 14,
     },
 
     header: {
@@ -120,43 +105,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    labelStatus: {
-        fontSize: SIZES.small,
+    heroLabel: {
+        color: '#9CA3AF',
+        fontSize: 13,
         fontWeight: '600',
-        color: COLORS.secondaryContainer,
-        marginBottom: 6,
-    },
-
-    namaFase: {
-        fontSize: SIZES.xLarge,
-        fontWeight: '700',
-        color: COLORS.onSecondary,
-    },
-
-    fase: {
-        fontSize: SIZES.small,
-        color: COLORS.secondaryContainer,
-        marginTop: 4,
+        letterSpacing: 0.8,
     },
 
     statusBadge: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
-        backgroundColor: COLORS.secondaryContainer,
+        backgroundColor: '#D1FAE5',
         paddingHorizontal: 10,
-        paddingVertical: 7,
-        borderRadius: 20,
+        paddingVertical: 6,
+        borderRadius: 999,
     },
 
-    statusIdle: {
-        backgroundColor: COLORS.outlineVariant,
+    statusBadgeIdle: {
+        backgroundColor: '#E5E7EB',
     },
 
     statusDot: {
         width: 7,
         height: 7,
-        borderRadius: 10,
+        borderRadius: 4,
         backgroundColor: COLORS.success,
     },
 
@@ -165,50 +138,106 @@ const styles = StyleSheet.create({
     },
 
     statusText: {
-        fontSize: SIZES.xSmall,
-        fontWeight: '600',
-        color: COLORS.onSecondaryContainer,
-    },
-
-    infoContainer: {
-        flexDirection: 'row',
-        gap: SIZES.small,
-    },
-
-    infoCard: {
-        flex: 1,
-        backgroundColor: COLORS.secondaryContainer,
-        borderRadius: 14,
-        padding: SIZES.medium,
-        gap: 7,
-    },
-
-    infoLabel: {
-        fontSize: SIZES.xSmall,
-        color: COLORS.onSecondaryContainer,
-    },
-
-    infoValue: {
-        fontSize: SIZES.xLarge,
+        color: COLORS.secondary,
+        fontSize: 10,
         fontWeight: '700',
-        color: COLORS.onSecondaryContainer,
     },
 
-    button: {
+    statusTextIdle: {
+        color: COLORS.gray,
+    },
+
+    phaseContainer: {
+        gap: 3,
+    },
+
+    phaseName: {
+        color: COLORS.onPrimary,
+        fontSize: 25,
+        fontWeight: '800',
+    },
+
+    phaseNumber: {
+        color: '#9CA3AF',
+        fontSize: 12,
+    },
+
+    progressBackground: {
+        height: 5,
+        backgroundColor: '#374151',
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
+
+    progressFill: {
+        height: '100%',
+        backgroundColor: COLORS.accent,
+        borderRadius: 10,
+    },
+
+    temperatureContainer: {
+        gap: 1,
+    },
+
+    temperatureLabel: {
+        color: '#9CA3AF',
+        fontSize: 13,
+        fontWeight: '600',
+    },
+
+    temperatureValue: {
+        color: COLORS.onPrimary,
+        fontSize: 56,
+        fontWeight: '800',
+        marginTop: 2,
+        fontVariant: ['tabular-nums'],
+    },
+
+    temperatureUnit: {
+        color: COLORS.accent,
+        fontSize: 25,
+        fontWeight: '600',
+    },
+
+    machineStatus: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    machineDot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: COLORS.success,
+        marginRight: 7,
+    },
+
+    machineStatusText: {
+        color: COLORS.onPrimary,
+        fontSize: 13,
+    },
+
+    sensorInfo: {
+        color: '#6B7280',
+        fontSize: 11,
+    },
+
+    actionButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 7,
         backgroundColor: COLORS.white,
         borderRadius: 12,
-        padding: SIZES.medium,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 8,
+        paddingVertical: 13,
     },
 
-    buttonText: {
-        fontSize: SIZES.medium,
+    actionText: {
+        color: COLORS.primary,
+        fontSize: 14,
         fontWeight: '700',
-        color: COLORS.secondary,
     },
+
 });
 
 export default HeroCard;

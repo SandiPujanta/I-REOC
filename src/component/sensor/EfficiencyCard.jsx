@@ -5,6 +5,7 @@ import { View, Text, StyleSheet, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../../constants';
 import { hitungSusut } from '../../utils/calculations';
+import MiniBarChart from './MiniBarChart.jsx';
 
 const EfficiencyCard = ({ batchAktif }) => {
     // Validasi data batch
@@ -125,6 +126,21 @@ const EfficiencyCard = ({ batchAktif }) => {
             <Text style={styles.footerText}>
                 Perhitungan berdasarkan perubahan massa batch aktif.
             </Text>
+
+            {/* Grafik Tren Berat */}
+            <View style={styles.chartSection}>
+                <Text style={styles.chartTitle}>
+                    Tren Berat Sampah
+                </Text>
+
+                <MiniBarChart
+                    data={batchAktif.riwayatBerat}
+                />
+
+                <Text style={styles.chartCaption}>
+                    Perkembangan berat selama proses simulasi
+                </Text>
+            </View>
 
         </View>
     );
@@ -274,6 +290,24 @@ const styles = StyleSheet.create({
         color: COLORS.onSurfaceVariant,
     },
 
+    chartSection: {
+        marginTop: SIZES.small,
+        paddingTop: SIZES.medium,
+        borderTopWidth: 1,
+        borderTopColor: COLORS.outlineVariant,
+        gap: 8,
+    },
+
+    chartTitle: {
+        fontSize: SIZES.small,
+        fontWeight: '700',
+        color: COLORS.onSurface,
+    },
+
+    chartCaption: {
+        fontSize: SIZES.xSmall,
+        color: COLORS.onSurfaceVariant,
+    },
 });
 
 export default EfficiencyCard;

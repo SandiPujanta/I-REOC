@@ -145,7 +145,6 @@ const DashboardScreen = ({ navigation }) => {
             fase={faseMesin}
             berat={batchAktif.beratSekarang}
             berjalan={berjalan}
-            onToggle={handleMachineToggle}
           />
         )}
 

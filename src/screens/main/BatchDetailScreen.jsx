@@ -32,13 +32,6 @@ const BatchDetailScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Header & Tombol Kembali */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBack}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Detail Batch #{batch.id}</Text>
-      </View>
 
       {/* Informasi Utama */}
       <View style={styles.card}>
