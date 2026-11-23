@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../../constants';
 
 // Kondisi awal seluruh aktuator
-const INITIAL_ACTUATORS = {
+export const INITIAL_ACTUATORS = {
     dinamo: false,
     pemanas: false,
     kipas: false,
@@ -36,10 +36,15 @@ const ACTUATOR_ITEMS = [
     },
 ];
 
-const ActuatorControls = () => {
+const ActuatorControls = ({
+    actuators: controlledActuators,
+    setActuators: controlledSetActuators,
+}) => {
 
-    // State seluruh aktuator
-    const [actuators, setActuators] = useState(INITIAL_ACTUATORS);
+    // Gunakan state dari props (lifted state) atau fallback ke state lokal
+    const [localActuators, setLocalActuators] = useState(INITIAL_ACTUATORS);
+    const actuators = controlledActuators ?? localActuators;
+    const setActuators = controlledSetActuators ?? setLocalActuators;
 
     // Mengubah kondisi satu aktuator
     const handleToggle = (key) => {
@@ -59,10 +64,32 @@ const ActuatorControls = () => {
         });
     };
 
+    // Menyalakan seluruh aktuator
+    const handleAllOn = () => {
+        setActuators({
+            dinamo: true,
+            pemanas: true,
+            kipas: true,
+            filter: true,
+        });
+    };
+
     // Menghitung jumlah aktuator yang aktif
     const activeCount = Object.values(actuators).filter(
         (status) => status
     ).length;
+
+    // Cek apakah ada minimal 1 perangkat yang sedang aktif
+    const isAnyActive = activeCount > 0;
+
+    // Toggle seluruh aktuator (Nyalakan Semua / Matikan Semua)
+    const handleToggleAll = () => {
+        if (isAnyActive) {
+            handleAllOff();
+        } else {
+            handleAllOn();
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -150,20 +177,32 @@ const ActuatorControls = () => {
 
             </View>
 
-            {/* Tombol Matikan Semua */}
+            {/* Tombol Toggle Semua (ON / OFF) */}
             <TouchableOpacity
-                style={styles.allOff}
-                onPress={handleAllOff}
+                style={[
+                    styles.allToggle,
+                    {
+                        borderColor: isAnyActive
+                            ? COLORS.danger + '55'
+                            : COLORS.secondary + '55',
+                    },
+                ]}
+                onPress={handleToggleAll}
                 activeOpacity={0.8}
             >
                 <Ionicons
                     name="power"
                     size={19}
-                    color={COLORS.danger}
+                    color={isAnyActive ? COLORS.danger : COLORS.secondary}
                 />
 
-                <Text style={styles.allOffText}>
-                    Matikan Semua
+                <Text
+                    style={[
+                        styles.allToggleText,
+                        { color: isAnyActive ? COLORS.danger : COLORS.secondary },
+                    ]}
+                >
+                    {isAnyActive ? 'Matikan Semua' : 'Nyalakan Semua'}
                 </Text>
             </TouchableOpacity>
         </View>
@@ -264,7 +303,7 @@ const styles = StyleSheet.create({
         color: COLORS.secondary,
     },
 
-    allOff: {
+    allToggle: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -273,12 +312,10 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.medium,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: COLORS.danger + '55',
         backgroundColor: COLORS.surface,
     },
 
-    allOffText: {
-        color: COLORS.danger,
+    allToggleText: {
         fontSize: SIZES.small,
         fontWeight: '700',
     },

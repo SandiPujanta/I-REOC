@@ -16,9 +16,18 @@ import RecentBatchCard from '../../component/dashboard/RecentBatchCard';
 import ActuatorControls from '../../component/dashboard/ActuatorControls';
 
 const DashboardScreen = ({ navigation }) => {
-  const [berjalan, setBerjalan] = useState(true);
+  // State seluruh aktuator perangkat (mengontrol status mesin & HeroCard)
+  const [actuators, setActuators] = useState({
+    dinamo: true,
+    pemanas: true,
+    kipas: false,
+    filter: false,
+  });
 
-  // Mencari kondisi mesin berdasarkan state
+  // Mesin berstatus BERJALAN jika minimal ada 1 aktuator yang aktif
+  const berjalan = Object.values(actuators).some((status) => status);
+
+  // Mencari kondisi mesin berdasarkan state berjalan
   const faseMesin = phases.find(
     (p) => p.id === (berjalan ? 'HEATING' : 'IDLE')
   );
@@ -37,7 +46,11 @@ const DashboardScreen = ({ navigation }) => {
 
   // Toggle Start / Stop mesin
   const handleMachineToggle = () => {
-    setBerjalan((prev) => !prev);
+    if (berjalan) {
+      setActuators({ dinamo: false, pemanas: false, kipas: false, filter: false });
+    } else {
+      setActuators({ dinamo: true, pemanas: true, kipas: true, filter: true });
+    }
   };
 
   // Navigasi Sensor
@@ -145,6 +158,7 @@ const DashboardScreen = ({ navigation }) => {
             fase={faseMesin}
             berat={batchAktif.beratSekarang}
             berjalan={berjalan}
+            onToggle={handleMachineToggle}
           />
         )}
 
@@ -163,7 +177,10 @@ const DashboardScreen = ({ navigation }) => {
             </View>
           </View>
 
-          <ActuatorControls />
+          <ActuatorControls
+            actuators={actuators}
+            setActuators={setActuators}
+          />
 
         </View>
 
