@@ -1,66 +1,45 @@
+// Data Buku Panduan — daftar bahan yang boleh dan dilarang dimasukkan ke reaktor
 
-export const batches = [
+export const SOP_VERSION = 'SOP v2';
+
+export const guideSections = [
     {
-        id: 4,
-        jenis: 'Campuran Organik',
-        tanggal: '11 Nov 2026',
-        durasiJam: 36,
-        beratAwal: 4.0,
-        beratAkhir: 1.2,
-        energiKwh: 5.8,
-        suhuPuncak: 58,
-        catatan: 'Pengolahan campuran sampah organik selesai.',
-        status: 'selesai',
+        id: 'boleh',
+        judul: 'Boleh Dimasukkan',
+        diizinkan: true,
+        items: [
+            {
+                id: 'a1',
+                judul: 'Sisa Sayur & Buah',
+                keterangan: 'Kulit buah, sayuran layu, ampas tahu',
+            },
+            {
+                id: 'a2',
+                judul: 'Nasi & Sisa Makanan',
+                keterangan: 'Nasi, sisa roti, ampas kopi kering',
+            },
+            {
+                id: 'a3',
+                judul: 'Canang & Banten Organik',
+                keterangan: 'Bunga & janur (tanpa staples)',
+            },
+        ],
     },
     {
-        id: 3,
-        jenis: 'Canang & Banten',
-        tanggal: '8 Nov 2026',
-        durasiJam: 22,
-        beratAwal: 1.8,
-        beratAkhir: 0.5,
-        energiKwh: 3.4,
-        suhuPuncak: 55,
-        catatan: 'Pengolahan bahan organik canang dan banten.',
-        status: 'selesai',
-    },
-    {
-        id: 2,
-        jenis: 'Sisa Makanan Dapur',
-        tanggal: '5 Nov 2026',
-        durasiJam: 28,
-        beratAwal: 2.5,
-        beratAkhir: 0.8,
-        energiKwh: 4.2,
-        suhuPuncak: 57,
-        catatan: 'Pengolahan sisa makanan dapur selesai.',
-        status: 'selesai',
-    },
-    {
-        id: 1,
-        jenis: 'Sayur & Buah',
-        tanggal: '3 Nov 2026',
-        durasiJam: 30,
-        beratAwal: 3.2,
-        beratAkhir: 0.9,
-        energiKwh: 4.6,
-        suhuPuncak: 56,
-        catatan: 'Pengolahan sayur dan buah selesai.',
-        status: 'selesai',
+        id: 'dilarang',
+        judul: 'Dilarang Dimasukkan',
+        diizinkan: false,
+        items: [
+            {
+                id: 'f1',
+                judul: 'Plastik, Kaca & Logam',
+                keterangan: 'Menyumbat bilah pengaduk mekanis',
+            },
+            {
+                id: 'f2',
+                judul: 'Tulang Besar & Minyak Pekat',
+                keterangan: 'Merusak motor & mematikan mikroba',
+            },
+        ],
     },
 ];
-
-// Batch aktif, terpisah dari riwayat batch selesai
-export const batchAktif = {
-    id: 5,
-    jenis: 'Campuran Sisa Organik',
-    tanggal: '20 Nov 2026',
-    durasiJam: 18,
-    beratAwal: 3.8,
-    beratAkhir: null,
-    beratSekarang: 2.45,
-    energiKwh: 5.8,
-    suhuPuncak: 54.2,
-    catatan: 'Proses pengolahan masih berlangsung.',
-    status: 'aktif',
-};
