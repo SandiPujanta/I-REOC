@@ -225,13 +225,6 @@ const SensorScreen = ({ navigation }) => {
           <View style={styles.separator} />
         )}
 
-        ListFooterComponent={
-          <Text style={styles.footerText}>
-            Seluruh pembacaan merupakan data simulasi
-            dan belum terhubung dengan perangkat fisik.
-          </Text>
-        }
-
         contentContainerStyle={styles.listContent}
 
         showsVerticalScrollIndicator={false}
@@ -349,14 +342,6 @@ const styles = StyleSheet.create({
 
   separator: {
     height: 10,
-  },
-
-  footerText: {
-    textAlign: 'center',
-    fontSize: 10,
-    color: COLORS.onSurfaceVariant,
-    marginTop: 18,
-    lineHeight: 16,
   },
 
 });

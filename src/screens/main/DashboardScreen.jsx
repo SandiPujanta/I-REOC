@@ -293,19 +293,6 @@ const DashboardScreen = ({ navigation }) => {
 
         </View>
 
-        {/* FOOTER */}
-        <View style={styles.footer}>
-          <Ionicons
-            name="hardware-chip-outline"
-            size={15}
-            color={COLORS.onSurfaceVariant}
-          />
-
-          <Text style={styles.footerText}>
-            I-REOC Dekomposer • Mode Simulasi
-          </Text>
-        </View>
-
       </ScrollView>
     </SafeAreaView>
   );
@@ -474,20 +461,6 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
     color: COLORS.onSurfaceVariant,
     paddingVertical: SIZES.medium,
-  },
-
-  // FOOTER
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 6,
-    paddingTop: SIZES.small,
-  },
-
-  footerText: {
-    fontSize: SIZES.xSmall,
-    color: COLORS.onSurfaceVariant,
   },
 
 });
