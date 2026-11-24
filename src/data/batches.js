@@ -9,6 +9,7 @@ export const batches = [
         beratAkhir: 1.2,
         energiKwh: 5.8,
         suhuPuncak: 58,
+        trenSimulasi: [12, 18, 26, 43, 58, 76, 92],
         catatan: 'Pengolahan campuran sampah organik selesai.',
         status: 'selesai',
     },
