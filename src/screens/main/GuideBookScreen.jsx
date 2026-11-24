@@ -1,163 +1,316 @@
-/**
- * GuideBookScreen — Buku Panduan & Perawatan (Tab 4)
- *
- * Konten dari HTML GuideBook.html:
- *   - Header: judul + badge "SOP v2"
- *   - Search bar: cari petunjuk bahan
- *   - Seksi "Boleh Dimasukkan": daftar bahan organik yang aman
- *   - Seksi "Dilarang Dimasukkan": bahan yang merusak mesin
- *   (data statis — tidak butuh API)
- */
-import React, { useState, useMemo } from 'react';
-import { View, Text, FlatList, TextInput, SectionList, TouchableOpacity, StyleSheet } from 'react-native';
-import { COLORS } from '../../constants';
+import React, { useMemo, useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  Pressable,
+  StyleSheet,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
-// ─── Data panduan (statis, bisa juga dari API CMS nanti) ─────────────────────
-const ALLOWED_ITEMS = [
-  {
-    id: 'a1',
-    title: 'Sisa Sayur & Buah',
-    description: 'Kulit buah, sayuran layu, ampas tahu',
-    allowed: true,
-  },
-  {
-    id: 'a2',
-    title: 'Nasi & Sisa Makanan',
-    description: 'Nasi, sisa roti, ampas kopi kering',
-    allowed: true,
-  },
-  {
-    id: 'a3',
-    title: 'Canang & Banten Organik',
-    description: 'Bunga & janur (tanpa staples)',
-    allowed: true,
-  },
-];
+import { ROUTES, COLORS } from '../../constants';
+import { guideSections, SOP_VERSION } from '../../data/guide';
 
-const FORBIDDEN_ITEMS = [
-  {
-    id: 'f1',
-    title: 'Plastik, Kaca & Logam',
-    description: 'Menyumbat bilah pengaduk mekanis',
-    allowed: false,
-  },
-  {
-    id: 'f2',
-    title: 'Tulang Besar & Minyak Pekat',
-    description: 'Merusak motor & mematikan mikroba',
-    allowed: false,
-  },
-];
+// accent opacity 20% (bg-accent/20) dan rose-50 dari referensi
+const ACCENT_SOFT = COLORS.accent + '33';
+const DANGER_SOFT = '#FFF1F2';
 
-// SectionList format
-const GUIDE_SECTIONS = [
-  { title: 'Boleh Dimasukkan', data: ALLOWED_ITEMS },
-  { title: 'Dilarang Dimasukkan', data: FORBIDDEN_ITEMS },
-];
+const GuideBookScreen = ({ navigation }) => {
+  const [query, setQuery] = useState('');
+  const keyword = query.trim().toLowerCase();
 
-// ─── Component ────────────────────────────────────────────────────────────────
-const GuideBookScreen = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  // Saring item berdasarkan kata kunci; seksi kosong disembunyikan
+  const sections = useMemo(() => {
+    if (!keyword) return guideSections;
 
-  // Filter berdasarkan search query
-  const filteredSections = useMemo(() => {
-    const q = searchQuery.toLowerCase().trim();
-    if (!q) return GUIDE_SECTIONS;
-
-    return GUIDE_SECTIONS
+    return guideSections
       .map((section) => ({
         ...section,
-        data: section.data.filter(
+        items: section.items.filter(
           (item) =>
-            item.title.toLowerCase().includes(q) ||
-            item.description.toLowerCase().includes(q)
+            item.judul.toLowerCase().includes(keyword) ||
+            item.keterangan.toLowerCase().includes(keyword)
         ),
       }))
-      .filter((section) => section.data.length > 0);
-  }, [searchQuery]);
+      .filter((section) => section.items.length > 0);
+  }, [keyword]);
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // TODO: Bangun UI di sini menggunakan data:
-  //   searchQuery / setSearchQuery      → state search bar
-  //   filteredSections (array SectionList):
-  //     section.title                  → "Boleh Dimasukkan" / "Dilarang Dimasukkan"
-  //     section.data (array item):
-  //       item.id                      → key
-  //       item.title                   → nama bahan
-  //       item.description             → keterangan
-  //       item.allowed                 → true = ✓ hijau, false = ✗ merah
-  // ─────────────────────────────────────────────────────────────────────────────
-
-  const renderItem = ({ item }) => (
-    // TODO: ganti dengan UI card sesuai desain
-    <View style={styles.item}>
-      <Text style={{ color: item.allowed ? COLORS.success : COLORS.danger }}>
-        {item.allowed ? '✓' : '✗'} {item.title}
-      </Text>
-      <Text>{item.description}</Text>
-    </View>
-  );
-
-  const renderSectionHeader = ({ section }) => (
-    // TODO: ganti dengan UI header seksi
-    <Text style={styles.sectionTitle}>{section.title}</Text>
-  );
+  const goToDashboard = () => {
+    navigation.navigate(ROUTES.DASHBOARD);
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Search bar */}
-      {/* TODO: ganti dengan UI search bar sesuai desain */}
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Cari petunjuk bahan..."
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      />
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      {/* HEADER */}
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <Pressable
+            onPress={goToDashboard}
+            style={styles.backButton}
+            accessibilityRole="button"
+            accessibilityLabel="Kembali ke beranda"
+          >
+            <Ionicons name="arrow-back" size={20} color={COLORS.onSurface} />
+          </Pressable>
 
-      <SectionList
-        sections={filteredSections}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        renderSectionHeader={renderSectionHeader}
-        stickySectionHeadersEnabled={false}
-        contentContainerStyle={styles.list}
-      />
-    </View>
+          <View style={styles.headerInfo}>
+            <Text style={styles.screenTitle}>Buku Panduan</Text>
+            <Text style={styles.screenSubtitle}>Petunjuk Ringkas Penggunaan</Text>
+          </View>
+        </View>
+
+        <View style={styles.versionBadge}>
+          <Text style={styles.versionText}>{SOP_VERSION}</Text>
+        </View>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        {/* SEARCH BAR */}
+        <View style={styles.searchBar}>
+          <Ionicons name="search" size={20} color={COLORS.onSurfaceVariant} />
+
+          <TextInput
+            style={styles.searchInput}
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Cari petunjuk bahan..."
+            placeholderTextColor={COLORS.onSurfaceVariant + '99'}
+            returnKeyType="search"
+            autoCorrect={false}
+            accessibilityLabel="Cari petunjuk bahan"
+          />
+
+          {query.length > 0 && (
+            <Pressable
+              onPress={() => setQuery('')}
+              hitSlop={10}
+              accessibilityRole="button"
+              accessibilityLabel="Hapus pencarian"
+            >
+              <Ionicons
+                name="close-circle"
+                size={18}
+                color={COLORS.onSurfaceVariant}
+              />
+            </Pressable>
+          )}
+        </View>
+
+        {/* SEKSI PANDUAN */}
+        {sections.map((section) => (
+          <View key={section.id} style={styles.section}>
+            <Text style={styles.sectionTitle}>{section.judul}</Text>
+
+            <View style={styles.card}>
+              {section.items.map((item, index) => (
+                <View
+                  key={item.id}
+                  style={[styles.row, index > 0 && styles.rowDivider]}
+                >
+                  <View
+                    style={[
+                      styles.iconCircle,
+                      {
+                        backgroundColor: section.diizinkan
+                          ? ACCENT_SOFT
+                          : DANGER_SOFT,
+                      },
+                    ]}
+                  >
+                    <Ionicons
+                      name={section.diizinkan ? 'checkmark' : 'close'}
+                      size={18}
+                      color={section.diizinkan ? COLORS.primary : COLORS.danger}
+                    />
+                  </View>
+
+                  <View style={styles.rowInfo}>
+                    <Text style={styles.itemTitle}>{item.judul}</Text>
+                    <Text style={styles.itemDescription}>{item.keterangan}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        ))}
+
+        {/* HASIL KOSONG */}
+        {sections.length === 0 && (
+          <Text style={styles.emptyText}>
+            Tidak ada petunjuk yang cocok dengan “{query.trim()}”.
+          </Text>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: COLORS.surface,
-    padding: 16,
   },
-  searchInput: {
-    borderWidth: 1,
-    borderColor: COLORS.outline,
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    marginBottom: 16,
-    fontSize: 14,
+
+  // HEADER
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 12,
+    backgroundColor: COLORS.surface,
+  },
+
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: COLORS.surfaceVariant,
+    borderWidth: 1,
+    borderColor: COLORS.outlineVariant,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  list: {
+
+  headerInfo: {
+    flex: 1,
+  },
+
+  screenTitle: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: '600',
+    color: COLORS.onSurface,
+  },
+
+  screenSubtitle: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: COLORS.onSurfaceVariant,
+  },
+
+  versionBadge: {
+    backgroundColor: COLORS.secondary,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+  },
+
+  versionText: {
+    fontSize: 11,
+    lineHeight: 14,
+    fontWeight: '600',
+    color: COLORS.onSecondary,
+  },
+
+  // KONTEN
+  content: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
     paddingBottom: 24,
+    gap: 20,
   },
+
+  // SEARCH BAR
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: COLORS.surfaceVariant,
+    borderWidth: 1,
+    borderColor: COLORS.outlineVariant,
+    borderRadius: 999,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+
+  searchInput: {
+    flex: 1,
+    padding: 0,
+    fontSize: 14,
+    lineHeight: 20,
+    color: COLORS.onSurface,
+  },
+
+  // SEKSI
+  section: {
+    gap: 12,
+  },
+
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    lineHeight: 24,
+    fontWeight: '600',
     color: COLORS.onSurface,
-    marginTop: 16,
-    marginBottom: 8,
   },
-  item: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.outlineVariant,
+
+  card: {
+    backgroundColor: COLORS.surfaceVariant,
+    borderWidth: 1,
+    borderColor: COLORS.outlineVariant,
+    borderRadius: 26,
+    padding: 16,
   },
-  // TODO: tambah styles sesuai desain Anda
+
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+
+  rowDivider: {
+    marginTop: 12,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.outlineVariant,
+  },
+
+  iconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  rowInfo: {
+    flex: 1,
+    minWidth: 0,
+  },
+
+  itemTitle: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: '600',
+    color: COLORS.onSurface,
+  },
+
+  itemDescription: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: COLORS.onSurfaceVariant,
+  },
+
+  emptyText: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: COLORS.onSurfaceVariant,
+    paddingVertical: 16,
+  },
 });
 
 export default GuideBookScreen;
