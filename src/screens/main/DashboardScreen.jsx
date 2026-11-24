@@ -234,32 +234,27 @@ const DashboardScreen = ({ navigation }) => {
 
         </View>
 
+
         {/* RIWAYAT TERAKHIR */}
         <View style={styles.sectionContainer}>
 
           <View style={styles.sectionHeader}>
 
-            <View>
-              <Text style={styles.sectionTitle}>
-                Riwayat Terakhir
-              </Text>
-
-              <Text style={styles.sectionSubtitle}>
-                Hasil pengolahan sebelumnya
-              </Text>
-            </View>
+            <Text style={styles.sectionTitle}>
+              Riwayat Terakhir
+            </Text>
 
             <Pressable
               onPress={goToHistory}
               style={styles.seeAllButton}
             >
               <Text style={styles.seeAllText}>
-                Lihat Semua
+                Semua
               </Text>
 
               <Ionicons
                 name="chevron-forward"
-                size={15}
+                size={14}
                 color={COLORS.secondary}
               />
             </Pressable>

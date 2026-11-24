@@ -71,19 +71,18 @@ const styles = StyleSheet.create({
         minHeight: 76,
     },
 
-    // Icon
     iconContainer: {
-        width: 40,
-        height: 40,
-        borderRadius: 12,
+        width: 36,
+        height: 36,
+        borderRadius: 11,
         backgroundColor: '#F3F4F6',
         justifyContent: 'center',
         alignItems: 'center',
     },
 
-    // Informasi sensor
     sensorInfo: {
         flex: 1,
+        minWidth: 0,
         gap: 5,
     },
 
@@ -98,24 +97,23 @@ const styles = StyleSheet.create({
         color: COLORS.onSurfaceVariant,
     },
 
-    // Nilai sensor
     valueContainer: {
         alignItems: 'flex-end',
         justifyContent: 'center',
         gap: 5,
-        minWidth: 85,
+        minWidth: 90,
     },
 
     sensorValue: {
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: '800',
         color: COLORS.primary,
+        textAlign: 'right',
     },
 
     sensorDetail: {
         fontSize: 10,
         color: COLORS.secondary,
-        fontWeight: '500',
         textAlign: 'right',
     },
 
