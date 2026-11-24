@@ -2,6 +2,7 @@
 // Tab: Beranda | Sensor | Riwayat | Panduan | Profil
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import DashboardScreen from '../screens/main/DashboardScreen';
@@ -23,6 +24,11 @@ const TAB_ICONS = {
 };
 
 const MainTabNavigator = () => {
+  // Tinggi tab bar harus memperhitungkan area tombol navigasi Android (edge-to-edge),
+  // jika tidak, tab bar tertimpa tombol sistem.
+  const insets = useSafeAreaInsets();
+  const paddingBottom = Math.max(insets.bottom, 10);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -30,9 +36,8 @@ const MainTabNavigator = () => {
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.gray,
         tabBarStyle: {
-          // TODO: sesuaikan style tab bar sesuai desain Anda
-          height: 64,
-          paddingBottom: 10,
+          height: 54 + paddingBottom,
+          paddingBottom,
           paddingTop: 6,
           backgroundColor: COLORS.surface,
           borderTopColor: COLORS.outline,
@@ -41,7 +46,7 @@ const MainTabNavigator = () => {
           fontSize: 11,
           fontWeight: '600',
         },
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color }) => {
           const icons = TAB_ICONS[route.name] || { active: 'ellipse', inactive: 'ellipse-outline' };
           return <Ionicons name={focused ? icons.active : icons.inactive} size={22} color={color} />;
         },
