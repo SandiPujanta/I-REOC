@@ -36,7 +36,7 @@ const AppNavigator = () => {
       <Stack.Screen
         name={ROUTES.NOTIFICATION}
         component={NotificationScreen}
-        options={{ title: 'Notifikasi' }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={ROUTES.SETTINGS}
