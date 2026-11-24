@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../../constants';
 
@@ -8,16 +8,18 @@ const HeroCard = ({
     fase,
     berat,
     berjalan,
-    onToggle,
 }) => {
 
     const suhu = fase?.suhuSimulasi ?? null;
     const namaFase = fase?.nama ?? 'Menunggu proses';
     const nomorFase = fase?.fase ?? 0;
 
-    const progress = Math.min(
-        Math.max((nomorFase / 3) * 100, 0),
-        100
+    const progress = fase?.progress !== undefined
+        ? fase.progress
+        : Math.min(Math.max((nomorFase / 3) * 100, 0), 100);
+
+    const keteranganFase = fase?.keterangan || (
+        nomorFase > 0 ? `Tahap ${nomorFase} dari 3` : 'Menunggu proses'
     );
 
     return (
@@ -42,7 +44,7 @@ const HeroCard = ({
                         styles.statusText,
                         !berjalan && styles.statusTextIdle,
                     ]}>
-                        {berjalan ? 'BERJALAN' : 'SIAGA'}
+                        {fase?.id === 'DONE' ? 'SELESAI' : (berjalan ? 'BERJALAN' : 'SIAGA')}
                     </Text>
                 </View>
             </View>
@@ -54,7 +56,7 @@ const HeroCard = ({
                 </Text>
 
                 <Text style={styles.phaseNumber}>
-                    Tahap {nomorFase} dari 3
+                    {keteranganFase}
                 </Text>
             </View>
 
@@ -199,43 +201,9 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 
-    machineStatus: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    machineDot: {
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-        backgroundColor: COLORS.success,
-        marginRight: 7,
-    },
-
-    machineStatusText: {
-        color: COLORS.onPrimary,
-        fontSize: 13,
-    },
-
     sensorInfo: {
         color: '#6B7280',
         fontSize: 11,
-    },
-
-    actionButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 7,
-        backgroundColor: COLORS.white,
-        borderRadius: 12,
-        paddingVertical: 13,
-    },
-
-    actionText: {
-        color: COLORS.primary,
-        fontSize: 14,
-        fontWeight: '700',
     },
 
 });

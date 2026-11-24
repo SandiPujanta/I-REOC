@@ -33,7 +33,7 @@ const EfficiencyCard = ({ batch }) => {
                     <Ionicons
                         name="trending-up"
                         size={17}
-                        color={COLORS.secondary}
+                        color={COLORS.accent}
                     />
 
                     <Text style={styles.title}>
@@ -89,10 +89,10 @@ const EfficiencyCard = ({ batch }) => {
 const styles = StyleSheet.create({
 
     container: {
-        backgroundColor: COLORS.surfaceVariant,
-        borderRadius: 22,
-        padding: 16,
-        gap: 12,
+        backgroundColor: COLORS.primary,
+        borderRadius: 20,
+        padding: 18,
+        gap: 14,
     },
 
     header: {
@@ -110,12 +110,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 13,
         fontWeight: '700',
-        color: COLORS.primary,
+        color: COLORS.white,
     },
 
     batchLabel: {
-        fontSize: 10,
-        color: COLORS.onSurfaceVariant,
+        fontSize: 11,
+        color: '#9CA3AF',
     },
 
     resultContainer: {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
 
     resultLabel: {
         fontSize: 11,
-        color: COLORS.onSurfaceVariant,
+        color: '#9CA3AF',
     },
 
     valueRow: {
@@ -145,25 +145,26 @@ const styles = StyleSheet.create({
     resultValue: {
         fontSize: 29,
         fontWeight: '800',
-        color: COLORS.primary,
+        color: COLORS.white,
         fontVariant: ['tabular-nums'],
     },
 
     resultUnit: {
         fontSize: 16,
         fontWeight: '700',
+        color: COLORS.accent,
     },
 
     shrinkageBadge: {
-        backgroundColor: COLORS.secondary,
+        backgroundColor: '#D1FAE5',
         borderRadius: 20,
-        paddingHorizontal: 7,
+        paddingHorizontal: 8,
         paddingVertical: 4,
     },
 
     shrinkageText: {
-        color: COLORS.white,
-        fontSize: 9,
+        color: COLORS.secondary,
+        fontSize: 10,
         fontWeight: '700',
     },
 

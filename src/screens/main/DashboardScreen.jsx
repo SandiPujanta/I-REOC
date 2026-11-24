@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, RefreshControl, StyleSheet, Pressable } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ROUTES, COLORS, SIZES } from '../../constants';
@@ -15,6 +15,37 @@ import SensorRow from '../../component/dashboard/SensorRow';
 import RecentBatchCard from '../../component/dashboard/RecentBatchCard';
 import ActuatorControls from '../../component/dashboard/ActuatorControls';
 
+// Menentukan fase mesin berdasarkan kombinasi aktuator yang aktif
+const tentukanFaseMesin = (actuators) => {
+  const isAnyActive = Object.values(actuators).some(Boolean);
+
+  if (!isAnyActive) {
+    return phases.find((p) => p.id === 'IDLE');
+  }
+
+  // 1. Pemanas aktif -> Fase Panas / Termofilik (suhu 50-60°C)
+  if (actuators.pemanas) {
+    return phases.find((p) => p.id === 'HEATING');
+  }
+
+  // 2. Kipas aktif (pemanas mati) -> Pengeringan / Maturasi
+  if (actuators.kipas) {
+    return phases.find((p) => p.id === 'DRYING');
+  }
+
+  // 3. Hanya Filter saja yang menyala -> Proses Selesai (Filtrasi Bau Sampah)
+  if (actuators.filter && !actuators.dinamo && !actuators.pemanas && !actuators.kipas) {
+    return phases.find((p) => p.id === 'DONE');
+  }
+
+  // 4. Dinamo aktif (pemanas & kipas mati) -> Pencampuran EM4 / Inokulasi
+  if (actuators.dinamo) {
+    return phases.find((p) => p.id === 'MIX_EM4');
+  }
+
+  return phases.find((p) => p.id === 'IDLE');
+};
+
 const DashboardScreen = ({ navigation }) => {
   // State seluruh aktuator perangkat (mengontrol status mesin & HeroCard)
   const [actuators, setActuators] = useState({
@@ -27,10 +58,8 @@ const DashboardScreen = ({ navigation }) => {
   // Mesin berstatus BERJALAN jika minimal ada 1 aktuator yang aktif
   const berjalan = Object.values(actuators).some((status) => status);
 
-  // Mencari kondisi mesin berdasarkan state berjalan
-  const faseMesin = phases.find(
-    (p) => p.id === (berjalan ? 'HEATING' : 'IDLE')
-  );
+  // Menentukan kondisi fase mesin secara cerdas dari aktuator aktif
+  const faseMesin = tentukanFaseMesin(actuators);
 
   // Mengambil informasi sensor untuk Dashboard
   const sensorBeranda = sensors.filter(
@@ -43,15 +72,6 @@ const DashboardScreen = ({ navigation }) => {
   // Mengambil informasi pengguna dan perangkat
   const user = device.pengguna;
   const deviceId = device.id;
-
-  // Toggle Start / Stop mesin
-  const handleMachineToggle = () => {
-    if (berjalan) {
-      setActuators({ dinamo: false, pemanas: false, kipas: false, filter: false });
-    } else {
-      setActuators({ dinamo: true, pemanas: true, kipas: true, filter: true });
-    }
-  };
 
   // Navigasi Sensor
   const goToSensor = () => {
@@ -158,7 +178,6 @@ const DashboardScreen = ({ navigation }) => {
             fase={faseMesin}
             berat={batchAktif.beratSekarang}
             berjalan={berjalan}
-            onToggle={handleMachineToggle}
           />
         )}
 
