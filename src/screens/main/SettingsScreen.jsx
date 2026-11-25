@@ -1,4 +1,5 @@
-// SettingsScreen — pengaturan aplikasi & preferensi simulasi I-REOC
+
+// SettingsScreen — pengaturan aplikasi I-REOC
 import React, { useState } from 'react';
 import {
   View,
@@ -7,45 +8,55 @@ import {
   Switch,
   Pressable,
   ScrollView,
-  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import { COLORS, FONTS, ROUTES } from '../../constants';
 import { device } from '../../data/device';
-import { sensors } from '../../data/sensors';
 import { phases } from '../../data/phases';
 import { notifications } from '../../data/notification';
 import { SOP_VERSION } from '../../data/guide';
 import { RASIO_EM4_ML_PER_KG, TARIF_PER_KWH } from '../../data/konstanta';
 import { formatRupiah } from '../../utils/formatters';
 
+// Versi aplikasi
 const APP_VERSION = '1.0.0';
 const ACCENT_SOFT = COLORS.accent + '33';
 
+// Pengaturan notifikasi awal
 const DEFAULT_PREFERENCES = {
   notifEnabled: true,
   highTempAlert: true,
   phaseDoneAlert: true,
 };
 
+// Komponen pembungkus setiap bagian pengaturan
 const SectionBlock = ({ title, subtitle, children }) => (
   <View style={styles.section}>
     <View style={styles.sectionHeader}>
       <Text style={styles.sectionTitle}>{title}</Text>
-      {subtitle ? <Text style={styles.sectionSubtitle}>{subtitle}</Text> : null}
+      {subtitle ? (
+        <Text style={styles.sectionSubtitle}>{subtitle}</Text>
+      ) : null}
     </View>
+
     <View style={styles.card}>{children}</View>
   </View>
 );
 
-const SettingIcon = ({ name, color = COLORS.primary, background = ACCENT_SOFT }) => (
+// Komponen ikon pengaturan
+const SettingIcon = ({
+  name,
+  color = COLORS.primary,
+  background = ACCENT_SOFT,
+}) => (
   <View style={[styles.iconCircle, { backgroundColor: background }]}>
     <Ionicons name={name} size={18} color={color} />
   </View>
 );
 
+// Komponen pengaturan dengan tombol Switch
 const SettingSwitchRow = ({
   icon,
   title,
@@ -65,25 +76,33 @@ const SettingSwitchRow = ({
     <SettingIcon
       name={icon}
       color={disabled ? COLORS.gray : COLORS.secondary}
-      background={disabled ? COLORS.outlineVariant : COLORS.secondaryContainer}
+      background={
+        disabled ? COLORS.outlineVariant : COLORS.secondaryContainer
+      }
     />
 
     <View style={styles.rowInfo}>
       <Text style={styles.rowLabel}>{title}</Text>
-      {subtitle ? <Text style={styles.rowSublabel}>{subtitle}</Text> : null}
+      {subtitle ? (
+        <Text style={styles.rowSublabel}>{subtitle}</Text>
+      ) : null}
     </View>
 
     <Switch
       value={value}
       onValueChange={onValueChange}
       disabled={disabled}
-      trackColor={{ false: COLORS.outline, true: COLORS.secondary }}
+      trackColor={{
+        false: COLORS.outline,
+        true: COLORS.secondary,
+      }}
       thumbColor={COLORS.white}
       accessibilityLabel={title}
     />
   </View>
 );
 
+// Komponen baris yang dapat ditekan untuk navigasi
 const SettingActionRow = ({
   icon,
   iconColor = COLORS.primary,
@@ -93,7 +112,6 @@ const SettingActionRow = ({
   value,
   onPress,
   showDivider = false,
-  isDanger = false,
 }) => (
   <Pressable
     style={({ pressed }) => [
@@ -106,22 +124,31 @@ const SettingActionRow = ({
     accessibilityRole="button"
     accessibilityLabel={title}
   >
-    <SettingIcon name={icon} color={iconColor} background={iconBackground} />
+    <SettingIcon
+      name={icon}
+      color={iconColor}
+      background={iconBackground}
+    />
 
     <View style={styles.rowInfo}>
-      <Text style={[styles.rowLabel, isDanger && styles.dangerLabel]}>
-        {title}
-      </Text>
-      {subtitle ? <Text style={styles.rowSublabel}>{subtitle}</Text> : null}
+      <Text style={styles.rowLabel}>{title}</Text>
+      {subtitle ? (
+        <Text style={styles.rowSublabel}>{subtitle}</Text>
+      ) : null}
     </View>
 
     <View style={styles.rowRight}>
       {value ? <Text style={styles.rowValue}>{value}</Text> : null}
-      <Ionicons name="chevron-forward" size={16} color={COLORS.onSurfaceVariant} />
+      <Ionicons
+        name="chevron-forward"
+        size={16}
+        color={COLORS.onSurfaceVariant}
+      />
     </View>
   </Pressable>
 );
 
+// Komponen informasi tanpa interaksi
 const SettingInfoRow = ({ label, value, showDivider = false }) => (
   <View style={[styles.infoRow, showDivider && styles.rowDivider]}>
     <Text style={styles.infoLabel}>{label}</Text>
@@ -131,14 +158,30 @@ const SettingInfoRow = ({ label, value, showDivider = false }) => (
 
 const SettingsScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
+
+  // Menyimpan preferensi notifikasi selama aplikasi berjalan
   const [preferences, setPreferences] = useState(DEFAULT_PREFERENCES);
-  const [lastDiagnostic, setLastDiagnostic] = useState(null);
 
-  const unreadCount = notifications.filter((item) => !item.dibaca).length;
-  const heatingPhase = phases.find((phase) => phase.id === 'HEATING');
-  const modelSpec = device.spesifikasi.find((item) => item.id === 'model');
-  const networkSpec = device.spesifikasi.find((item) => item.id === 'jaringan');
+  // Menghitung jumlah notifikasi yang belum dibaca
+  const unreadCount = notifications.filter(
+    (item) => !item.dibaca
+  ).length;
 
+  // Mengambil data fase pemanasan
+  const heatingPhase = phases.find(
+    (phase) => phase.id === 'HEATING'
+  );
+
+  // Mengambil informasi perangkat
+  const modelSpec = device.spesifikasi.find(
+    (item) => item.id === 'model'
+  );
+
+  const networkSpec = device.spesifikasi.find(
+    (item) => item.id === 'jaringan'
+  );
+
+  // Mengubah preferensi notifikasi
   const updatePreference = (key, nextValue) => {
     setPreferences((prev) => ({
       ...prev,
@@ -146,108 +189,16 @@ const SettingsScreen = ({ navigation }) => {
     }));
   };
 
+  // Membuka pusat notifikasi
   const handleOpenNotification = () => {
     navigation.navigate(ROUTES.NOTIFICATION);
   };
 
+  // Membuka buku panduan bahan
   const handleOpenGuide = () => {
-    navigation.navigate('MainTabs', { screen: ROUTES.GUIDE });
-  };
-
-  const handleOpenSensor = () => {
-    navigation.navigate('MainTabs', { screen: ROUTES.SENSOR });
-  };
-
-  const handleShowPhaseTargets = () => {
-    const phaseLines = phases
-      .filter((phase) => phase.rentangSuhu)
-      .map(
-        (phase) =>
-          `• ${phase.nama}: ${phase.rentangSuhu.min}°C – ${phase.rentangSuhu.max}°C`
-      )
-      .join('\n');
-
-    Alert.alert('Rentang Suhu Fase I-REOC', phaseLines);
-  };
-
-  const handleShowEm4Info = () => {
-    Alert.alert(
-      'Rasio Dosis Bioaktivator EM4',
-      `Aplikasi menghitung kebutuhan EM4 sebesar ${RASIO_EM4_ML_PER_KG} ml untuk setiap 1 kg sampah organik awal.`
-    );
-  };
-
-  const handleShowTariffInfo = () => {
-    Alert.alert(
-      'Tarif Listrik Simulasi',
-      `Estimasi biaya listrik dihitung menggunakan tarif acuan ${formatRupiah(
-        TARIF_PER_KWH
-      )} per kWh berdasarkan pembacaan energi simulasi.`
-    );
-  };
-
-  const handleRunDiagnostic = () => {
-    const normalCount = sensors.filter((item) => item.status === 'normal').length;
-    const summaryLines = sensors
-      .map((item) => `• ${item.nama} (${item.perangkat}): ${item.nilai} ${item.satuan}`)
-      .join('\n');
-
-    const timestamp = new Date().toLocaleTimeString('id-ID', {
-      hour: '2-digit',
-      minute: '2-digit',
+    navigation.navigate('MainTabs', {
+      screen: ROUTES.GUIDE,
     });
-
-    setLastDiagnostic(`${normalCount}/${sensors.length} sensor normal (${timestamp})`);
-
-    Alert.alert(
-      'Hasil Uji Diagnostik Simulasi',
-      `Status Perangkat: ${device.id} (${networkSpec?.nilai || 'Lokal'})\n` +
-        `${normalCount} dari ${sensors.length} sensor berada dalam kondisi normal:\n\n` +
-        `${summaryLines}\n\n` +
-        'Catatan: Pengujian membaca data telemetri simulasi lokal dan belum terhubung ke perangkat fisik.',
-      [
-        { text: 'Tutup', style: 'cancel' },
-        { text: 'Buka Sensor', onPress: handleOpenSensor },
-      ]
-    );
-  };
-
-  const isDefaultPreferences =
-    preferences.notifEnabled === DEFAULT_PREFERENCES.notifEnabled &&
-    preferences.highTempAlert === DEFAULT_PREFERENCES.highTempAlert &&
-    preferences.phaseDoneAlert === DEFAULT_PREFERENCES.phaseDoneAlert;
-
-  const handleResetPreferences = () => {
-    if (isDefaultPreferences) {
-      Alert.alert(
-        'Pengaturan Sudah Default',
-        'Seluruh preferensi notifikasi saat ini sudah berada pada konfigurasi awal.'
-      );
-      return;
-    }
-
-    Alert.alert(
-      'Reset Preferensi Pengaturan',
-      'Kembalikan semua preferensi notifikasi simulasi ke pengaturan awal?',
-      [
-        { text: 'Batal', style: 'cancel' },
-        {
-          text: 'Reset',
-          style: 'destructive',
-          onPress: () => {
-            setPreferences(DEFAULT_PREFERENCES);
-            Alert.alert('Berhasil', 'Preferensi pengaturan dikembalikan ke setelan awal.');
-          },
-        },
-      ]
-    );
-  };
-
-  const handleShowSimulationLimit = () => {
-    Alert.alert(
-      'Mode Simulasi Lokal',
-      'Aplikasi I-REOC saat ini berjalan dalam mode simulasi tanpa koneksi perangkat keras IoT maupun penyimpanan persisten (database/cloud). Perubahan toggle di halaman ini berlaku selama sesi aplikasi berjalan.'
-    );
   };
 
   return (
@@ -264,10 +215,18 @@ const SettingsScreen = ({ navigation }) => {
         <View style={styles.heroTopRow}>
           <View style={styles.heroBrand}>
             <View style={styles.heroIconBox}>
-              <Ionicons name="hardware-chip-outline" size={20} color={COLORS.accent} />
+              <Ionicons
+                name="hardware-chip-outline"
+                size={20}
+                color={COLORS.accent}
+              />
             </View>
+
             <View style={styles.heroBrandInfo}>
-              <Text style={styles.heroTitle}>{modelSpec?.nilai || 'I-REOC Dekomposer'}</Text>
+              <Text style={styles.heroTitle}>
+                {modelSpec?.nilai || 'I-REOC Dekomposer'}
+              </Text>
+
               <Text style={styles.heroSubtitle}>
                 {device.id} · {networkSpec?.nilai || 'Simulasi'}
               </Text>
@@ -281,37 +240,49 @@ const SettingsScreen = ({ navigation }) => {
         </View>
 
         <Text style={styles.heroNote}>
-          Preferensi disimpan secara lokal selama sesi aktif berlangsung (in-memory).
+          Preferensi disimpan secara lokal selama sesi aktif berlangsung.
         </Text>
       </View>
 
       {/* PREFERENSI NOTIFIKASI */}
-      <SectionBlock title="Notifikasi Simulasi" subtitle="Preferensi sesi">
+      <SectionBlock
+        title="Notifikasi Simulasi"
+        subtitle="Preferensi sesi"
+      >
         <SettingSwitchRow
           icon="notifications-outline"
           title="Aktifkan Notifikasi"
           subtitle="Kontrol utama peringatan aktivitas reaktor"
           value={preferences.notifEnabled}
-          onValueChange={(value) => updatePreference('notifEnabled', value)}
+          onValueChange={(value) =>
+            updatePreference('notifEnabled', value)
+          }
         />
+
         <SettingSwitchRow
           icon="thermometer-outline"
           title="Peringatan Suhu Kritis"
           subtitle="Peringatan jika suhu melebihi 60°C"
           value={preferences.highTempAlert}
-          onValueChange={(value) => updatePreference('highTempAlert', value)}
+          onValueChange={(value) =>
+            updatePreference('highTempAlert', value)
+          }
           disabled={!preferences.notifEnabled}
           showDivider
         />
+
         <SettingSwitchRow
           icon="checkmark-done-outline"
           title="Notifikasi Fase & Batch"
           subtitle="Informasi perpindahan tahap dan batch selesai"
           value={preferences.phaseDoneAlert}
-          onValueChange={(value) => updatePreference('phaseDoneAlert', value)}
+          onValueChange={(value) =>
+            updatePreference('phaseDoneAlert', value)
+          }
           disabled={!preferences.notifEnabled}
           showDivider
         />
+
         <SettingActionRow
           icon="mail-unread-outline"
           iconColor={COLORS.secondary}
@@ -327,53 +298,49 @@ const SettingsScreen = ({ navigation }) => {
         />
       </SectionBlock>
 
-      {/* PARAMETER & ACUAN PROSES */}
-      <SectionBlock title="Parameter Proses" subtitle="Acuan perhitungan">
-        <SettingActionRow
-          icon="flame-outline"
-          iconColor="#D97706"
-          iconBackground="#FEF3C7"
-          title="Target Suhu Fase Panas"
-          subtitle="Ketuk untuk melihat rentang suhu 3 fase"
+      {/* PARAMETER PROSES */}
+      <SectionBlock
+        title="Parameter Proses"
+        subtitle="Acuan perhitungan"
+      >
+        <SettingInfoRow
+          label="Target Suhu Fase Panas"
           value={
             heatingPhase?.rentangSuhu
               ? `${heatingPhase.rentangSuhu.min}–${heatingPhase.rentangSuhu.max}°C`
               : '—'
           }
-          onPress={handleShowPhaseTargets}
         />
-        <SettingActionRow
-          icon="flask-outline"
-          title="Rasio Bioaktivator EM4"
-          subtitle="Takaran per kilogram sampah awal"
+
+        <SettingInfoRow
+          label="Rasio Bioaktivator EM4"
           value={`${RASIO_EM4_ML_PER_KG} ml/kg`}
-          onPress={handleShowEm4Info}
           showDivider
         />
-        <SettingActionRow
-          icon="flash-outline"
-          iconColor={COLORS.secondary}
-          iconBackground={COLORS.secondaryContainer}
-          title="Tarif Listrik Simulasi"
-          subtitle="Acuan estimasi biaya per batch"
+
+        <SettingInfoRow
+          label="Tarif Listrik Simulasi"
           value={`${formatRupiah(TARIF_PER_KWH)}/kWh`}
-          onPress={handleShowTariffInfo}
           showDivider
         />
+
         <SettingActionRow
           icon="book-outline"
           iconColor={COLORS.secondary}
           iconBackground={COLORS.secondaryContainer}
           title="Buku Panduan Bahan"
-          subtitle="Buka daftar bahan yang diizinkan & dilarang"
+          subtitle="Daftar bahan yang diizinkan dan dilarang"
           value={SOP_VERSION}
           onPress={handleOpenGuide}
           showDivider
         />
       </SectionBlock>
 
-      {/* PERANGKAT & PEMELIHARAAN */}
-      <SectionBlock title="Perangkat & Pemeliharaan" subtitle="Diagnostik">
+      {/* INFORMASI PERANGKAT */}
+      <SectionBlock
+        title="Perangkat"
+        subtitle="Informasi spesifikasi"
+      >
         {device.spesifikasi.map((spec, index) => (
           <SettingInfoRow
             key={spec.id}
@@ -382,47 +349,38 @@ const SettingsScreen = ({ navigation }) => {
             showDivider={index > 0}
           />
         ))}
-        <SettingActionRow
-          icon="pulse-outline"
-          iconColor={COLORS.secondary}
-          iconBackground={COLORS.secondaryContainer}
-          title="Uji Diagnostik Simulasi"
-          subtitle={lastDiagnostic || 'Periksa kondisi pembacaan 5 sensor simulasi'}
-          onPress={handleRunDiagnostic}
-          showDivider
-        />
-        <SettingActionRow
-          icon="refresh-outline"
-          iconColor={COLORS.danger}
-          iconBackground="#FEE2E2"
-          title="Reset Preferensi Pengaturan"
-          subtitle="Kembalikan pengaturan notifikasi ke default"
-          onPress={handleResetPreferences}
-          showDivider
-          isDanger
-        />
       </SectionBlock>
 
       {/* TENTANG APLIKASI */}
       <SectionBlock title="Tentang Aplikasi">
-        <SettingInfoRow label="Nama Aplikasi" value="I-REOC" />
-        <SettingInfoRow label="Versi" value={APP_VERSION} showDivider />
-        <SettingActionRow
-          icon="information-circle-outline"
-          title="Status Penyimpanan & Koneksi"
-          subtitle="Mode simulasi lokal tanpa backend aktif"
-          value="Info"
-          onPress={handleShowSimulationLimit}
+        <SettingInfoRow
+          label="Nama Aplikasi"
+          value="I-REOC"
+        />
+
+        <SettingInfoRow
+          label="Versi"
+          value={APP_VERSION}
           showDivider
         />
+
+        <SettingInfoRow
+          label="Status Penyimpanan & Koneksi"
+          value="Simulasi Lokal"
+          showDivider
+        />
+
         <View style={[styles.aboutBox, styles.rowDivider]}>
-          <Text style={styles.aboutText}>{device.tentang}</Text>
+          <Text style={styles.aboutText}>
+            {device.tentang}
+          </Text>
         </View>
       </SectionBlock>
     </ScrollView>
   );
 };
 
+// STYLING
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -588,10 +546,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
-  },
-
-  dangerLabel: {
-    color: COLORS.danger,
   },
 
   rowSublabel: {
