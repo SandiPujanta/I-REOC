@@ -225,13 +225,6 @@ const SensorScreen = ({ navigation }) => {
           <View style={styles.separator} />
         )}
 
-        ListFooterComponent={
-          <Text style={styles.footerText}>
-            Seluruh pembacaan merupakan data simulasi
-            dan belum terhubung dengan perangkat fisik.
-          </Text>
-        }
-
         contentContainerStyle={styles.listContent}
 
         showsVerticalScrollIndicator={false}

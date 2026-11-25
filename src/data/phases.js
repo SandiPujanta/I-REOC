@@ -16,7 +16,7 @@ export const phases = [
         progress: 33,
         rentangSuhu: { min: 25, max: 35 },
         suhuSimulasi: 30,
-        keterangan: 'Tahap 1 dari 3 (Inokulasi)',
+        keterangan: 'Tahap Inokulasi    ',
     },
     {
         id: 'HEATING',
@@ -25,7 +25,7 @@ export const phases = [
         progress: 67,
         rentangSuhu: { min: 50, max: 60 },
         suhuSimulasi: 54.2,
-        keterangan: 'Tahap 2 dari 3 (Termofilik)',
+        keterangan: 'Tahap Termofilik',
     },
     {
         id: 'DRYING',
@@ -34,7 +34,7 @@ export const phases = [
         progress: 90,
         rentangSuhu: { min: 40, max: 55 },
         suhuSimulasi: 45,
-        keterangan: 'Tahap 3 dari 3 (Maturasi)',
+        keterangan: 'Tahap Maturasi',
     },
     {
         id: 'DONE',
