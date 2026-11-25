@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 // Constants
-import { ROUTES, COLORS, SIZES } from '../../constants';
+import { ROUTES, COLORS, SIZES, FONTS } from '../../constants';
 
 // Data Layer
 import { sensors } from '../../data/sensors';
@@ -296,12 +296,13 @@ const styles = StyleSheet.create({
 
   screenTitle: {
     fontSize: 17,
-    fontWeight: '800',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
   screenSubtitle: {
     fontSize: 11,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   simulationText: {
     color: COLORS.secondary,
     fontSize: 10,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
   },
 
   // PARAMETER SECTION
@@ -338,12 +339,13 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: 14,
-    fontWeight: '800',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
   sectionSubtitle: {
     fontSize: 10,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -354,6 +356,7 @@ const styles = StyleSheet.create({
   footerText: {
     textAlign: 'center',
     fontSize: 10,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
     marginTop: 18,
     lineHeight: 16,

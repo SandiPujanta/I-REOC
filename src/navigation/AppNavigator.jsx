@@ -5,7 +5,7 @@ import MainTabNavigator from './MainTabNavigator';
 import NotificationScreen from '../screens/main/NotificationScreen';
 import SettingsScreen from '../screens/main/SettingsScreen';
 import BatchDetailScreen from '../screens/main/BatchDetailScreen';
-import { ROUTES, COLORS } from '../constants';
+import { ROUTES, COLORS, FONTS } from '../constants';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +16,10 @@ const AppNavigator = () => {
         // TODO: sesuaikan header style dengan desain Anda
         headerStyle: { backgroundColor: COLORS.surface },
         headerTintColor: COLORS.primary,
-        headerTitleStyle: { fontWeight: 'bold', color: COLORS.onSurface },
+        headerTitleStyle: {
+          fontFamily: FONTS.headingBold,
+          color: COLORS.onSurface,
+        },
         headerShadowVisible: false,
       }}
     >

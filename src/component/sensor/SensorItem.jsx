@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../../constants';
+import { COLORS, SIZES, FONTS } from '../../constants';
 
 const SensorItem = ({
     icon,
@@ -88,12 +88,13 @@ const styles = StyleSheet.create({
 
     sensorName: {
         fontSize: 13,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.primary,
     },
 
     sensorSubtitle: {
         fontSize: 10,
+        fontFamily: FONTS.bodyRegular,
         color: COLORS.onSurfaceVariant,
     },
 
@@ -106,13 +107,14 @@ const styles = StyleSheet.create({
 
     sensorValue: {
         fontSize: 14,
-        fontWeight: '800',
+        fontFamily: FONTS.headingBold,
         color: COLORS.primary,
         textAlign: 'right',
     },
 
     sensorDetail: {
         fontSize: 10,
+        fontFamily: FONTS.bodyRegular,
         color: COLORS.secondary,
         textAlign: 'right',
     },

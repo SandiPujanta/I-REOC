@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../../constants';
+import { COLORS, SIZES, FONTS } from '../../constants';
 
 // Kondisi awal seluruh aktuator
 export const INITIAL_ACTUATORS = {
@@ -223,6 +223,7 @@ const styles = StyleSheet.create({
 
     summaryText: {
         fontSize: SIZES.small,
+        fontFamily: FONTS.bodyRegular,
         color: COLORS.onSurfaceVariant,
     },
 
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
 
     summaryBadgeText: {
         fontSize: SIZES.xSmall,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.gray,
     },
 
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
 
     controlLabel: {
         fontSize: SIZES.medium,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.onSurface,
     },
 
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
 
     controlState: {
         fontSize: SIZES.xSmall,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.onSurfaceVariant,
     },
 
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
 
     allToggleText: {
         fontSize: SIZES.small,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
     },
 
 });

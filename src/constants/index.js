@@ -47,6 +47,22 @@ export const SIZES = {
   xxLarge: 32,
 };
 
+// ─── Custom Font Families (Instrument Sans & Red Hat Text) ──────────────────
+// Weight maksimal yang tersedia pada berkas font adalah 700 (Bold);
+// setiap variasi dipetakan langsung ke nama font yang dimuat agar konsisten di Android/iOS/Web.
+export const FONTS = {
+  headingRegular: 'InstrumentSans_400Regular',
+  headingMedium: 'InstrumentSans_500Medium',
+  headingSemiBold: 'InstrumentSans_600SemiBold',
+  headingBold: 'InstrumentSans_700Bold',
+
+  bodyLight: 'RedHatText_300Light',
+  bodyRegular: 'RedHatText_400Regular',
+  bodyMedium: 'RedHatText_500Medium',
+  bodySemiBold: 'RedHatText_600SemiBold',
+  bodyBold: 'RedHatText_700Bold',
+};
+
 // ─── Route names ─────────────────────────────────────────────────────────────
 export const ROUTES = {
   // Main Tabs (5 tab I-REOC)

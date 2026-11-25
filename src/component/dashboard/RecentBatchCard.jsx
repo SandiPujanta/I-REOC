@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 
 const RecentBatchCard = ({ batch, onPress }) => {
 
@@ -107,12 +107,13 @@ const styles = StyleSheet.create({
 
     batchName: {
         fontSize: 13,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.primary,
     },
 
     batchDate: {
         fontSize: 10,
+        fontFamily: FONTS.bodyRegular,
         color: COLORS.onSurfaceVariant,
     },
 
@@ -124,13 +125,13 @@ const styles = StyleSheet.create({
 
     resultValue: {
         fontSize: 14,
-        fontWeight: '800',
+        fontFamily: FONTS.headingBold,
         color: COLORS.primary,
     },
 
     initialWeight: {
         fontSize: 10,
-        fontWeight: '500',
+        fontFamily: FONTS.bodyMedium,
         color: COLORS.secondary,
     },
 

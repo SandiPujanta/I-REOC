@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../../constants';
+import { COLORS, SIZES, FONTS } from '../../constants';
 import { notifications } from '../../data/notification';
 
 const NotificationScreen = ({ navigation }) => {
@@ -402,12 +402,13 @@ const styles = StyleSheet.create({
 
   screenTitle: {
     fontSize: 19,
-    fontWeight: '800',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
   screenSubtitle: {
     fontSize: 11,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -421,19 +422,20 @@ const styles = StyleSheet.create({
 
   summaryLabel: {
     fontSize: 10,
-    fontWeight: '700',
+    fontFamily: FONTS.bodyBold,
     letterSpacing: 1,
     color: '#D1D5DB',
   },
 
   summaryValue: {
     fontSize: 25,
-    fontWeight: '800',
+    fontFamily: FONTS.headingBold,
     color: COLORS.white,
   },
 
   summaryDescription: {
     fontSize: 11,
+    fontFamily: FONTS.bodyRegular,
     color: '#D1D5DB',
   },
 
@@ -447,14 +449,14 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: 15,
-    fontWeight: '800',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
   readAllText: {
     color: COLORS.secondary,
     fontSize: 10,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
   },
 
   disabledText: {
@@ -483,7 +485,7 @@ const styles = StyleSheet.create({
 
   filterText: {
     fontSize: 10,
-    fontWeight: '600',
+    fontFamily: FONTS.bodySemiBold,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -531,17 +533,18 @@ const styles = StyleSheet.create({
   notificationTitle: {
     flex: 1,
     fontSize: 12,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.primary,
   },
 
   unreadTitle: {
-    fontWeight: '800',
+    fontFamily: FONTS.headingBold,
   },
 
   notificationMessage: {
     fontSize: 10,
     lineHeight: 15,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -554,16 +557,18 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 9,
     color: COLORS.secondary,
-    fontWeight: '700',
+    fontFamily: FONTS.bodyBold,
   },
 
   separatorText: {
     color: COLORS.gray,
     fontSize: 9,
+    fontFamily: FONTS.bodyRegular,
   },
 
   timeText: {
     fontSize: 9,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -597,12 +602,13 @@ const styles = StyleSheet.create({
 
   emptyTitle: {
     fontSize: 15,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
   emptyDescription: {
     fontSize: 11,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
     textAlign: 'center',
   },

@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-import { COLORS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 import { batches } from '../../data/batches';
 import { hitungSusut, hitungDosisEM4, hitungBiayaListrik } from '../../utils/calculations';
 import { formatRupiah, formatKg, formatSuhu, formatPersen, formatMl } from '../../utils/formatters';
@@ -165,13 +165,14 @@ const styles = StyleSheet.create({
   batchName: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
   batchMeta: {
     fontSize: 12,
     lineHeight: 16,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 11,
     lineHeight: 14,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.primary,
   },
 
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
   heroLabel: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: '500',
+    fontFamily: FONTS.bodyMedium,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontSize: 36,
     lineHeight: 44,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     letterSpacing: -0.5,
     color: COLORS.onSurface,
   },
@@ -228,14 +229,14 @@ const styles = StyleSheet.create({
   susutText: {
     fontSize: 11,
     lineHeight: 14,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSecondary,
   },
 
   heroNote: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: '600',
+    fontFamily: FONTS.bodySemiBold,
     color: COLORS.secondary,
   },
 
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
@@ -287,13 +288,14 @@ const styles = StyleSheet.create({
   tileLabel: {
     fontSize: 11,
     lineHeight: 14,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
   tileValue: {
     fontSize: 14,
     lineHeight: 20,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     color: COLORS.onSurface,
   },
 
@@ -301,6 +303,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     lineHeight: 20,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurface,
   },
 
@@ -316,7 +319,7 @@ const styles = StyleSheet.create({
 
   errorText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
@@ -330,7 +333,7 @@ const styles = StyleSheet.create({
 
   backButtonText: {
     color: COLORS.white,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
   },
 });
 

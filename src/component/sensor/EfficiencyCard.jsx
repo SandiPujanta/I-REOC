@@ -3,7 +3,7 @@ import React from 'react';
 
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../../constants';
+import { COLORS, SIZES, FONTS } from '../../constants';
 import { hitungSusut } from '../../utils/calculations';
 import MiniBarChart from './MiniBarChart.jsx';
 
@@ -109,12 +109,13 @@ const styles = StyleSheet.create({
 
     title: {
         fontSize: 13,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.white,
     },
 
     batchLabel: {
         fontSize: 11,
+        fontFamily: FONTS.bodyRegular,
         color: '#9CA3AF',
     },
 
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
 
     resultLabel: {
         fontSize: 11,
+        fontFamily: FONTS.bodyRegular,
         color: '#9CA3AF',
     },
 
@@ -144,14 +146,14 @@ const styles = StyleSheet.create({
 
     resultValue: {
         fontSize: 29,
-        fontWeight: '800',
+        fontFamily: FONTS.headingBold,
         color: COLORS.white,
         fontVariant: ['tabular-nums'],
     },
 
     resultUnit: {
         fontSize: 16,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.accent,
     },
 
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
     shrinkageText: {
         color: COLORS.secondary,
         fontSize: 10,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
     },
 
 });

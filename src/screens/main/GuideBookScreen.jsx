@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-import { ROUTES, COLORS } from '../../constants';
+import { ROUTES, COLORS, FONTS } from '../../constants';
 import { guideSections, SOP_VERSION } from '../../data/guide';
 
 // accent opacity 20% (bg-accent/20) dan rose-50 dari referensi
@@ -193,13 +193,14 @@ const styles = StyleSheet.create({
   screenTitle: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
   screenSubtitle: {
     fontSize: 12,
     lineHeight: 16,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
   versionText: {
     fontSize: 11,
     lineHeight: 14,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSecondary,
   },
 
@@ -243,6 +244,7 @@ const styles = StyleSheet.create({
     padding: 0,
     fontSize: 14,
     lineHeight: 20,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurface,
   },
 
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
@@ -295,19 +297,21 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
   itemDescription: {
     fontSize: 12,
     lineHeight: 16,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
   emptyText: {
     fontSize: 12,
     lineHeight: 16,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
     paddingVertical: 16,
   },

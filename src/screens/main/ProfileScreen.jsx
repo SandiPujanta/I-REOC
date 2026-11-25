@@ -10,7 +10,7 @@
  */
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert, StyleSheet } from 'react-native';
-import { ROUTES, COLORS } from '../../constants';
+import { ROUTES, COLORS, FONTS } from '../../constants';
 
 // ─── Spesifikasi alat (statis, bisa dari API device-info nanti) ───────────────
 const DEVICE_SPECS = {
@@ -89,27 +89,27 @@ const ProfileScreen = ({ navigation }) => {
       {/* TODO: Bangun UI di sini */}
 
       {/* Avatar + user info */}
-      <Text>Inisial: {getInitials(user?.name)}</Text>
-      <Text>Nama: {user?.name}</Text>
-      <Text>Email: {user?.email}</Text>
+      <Text style={styles.text}>Inisial: {getInitials(user?.name)}</Text>
+      <Text style={styles.text}>Nama: {user?.name}</Text>
+      <Text style={styles.text}>Email: {user?.email}</Text>
 
       {/* Device specs */}
-      <Text>Model: {DEVICE_SPECS.model}</Text>
-      <Text>Firmware: {DEVICE_SPECS.firmware}</Text>
-      <Text>Kapasitas: {DEVICE_SPECS.capacity}</Text>
-      <Text>Jaringan: {DEVICE_SPECS.network}</Text>
+      <Text style={styles.text}>Model: {DEVICE_SPECS.model}</Text>
+      <Text style={styles.text}>Firmware: {DEVICE_SPECS.firmware}</Text>
+      <Text style={styles.text}>Kapasitas: {DEVICE_SPECS.capacity}</Text>
+      <Text style={styles.text}>Jaringan: {DEVICE_SPECS.network}</Text>
 
       {/* Tentang */}
-      <Text>{ABOUT_TEXT}</Text>
+      <Text style={styles.text}>{ABOUT_TEXT}</Text>
 
       {/* Tombol kalibrasi */}
       <TouchableOpacity onPress={handleCalibrate} disabled={isCalibratingLoading}>
-        <Text>{isCalibratingLoading ? 'Mengkalibrasi...' : 'Kalibrasi Ulang Sensor'}</Text>
+        <Text style={styles.actionText}>{isCalibratingLoading ? 'Mengkalibrasi...' : 'Kalibrasi Ulang Sensor'}</Text>
       </TouchableOpacity>
 
       {/* Menu navigasi */}
       <TouchableOpacity onPress={() => navigation.navigate(ROUTES.SETTINGS)}>
-        <Text>Pengaturan</Text>
+        <Text style={styles.actionText}>Pengaturan</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -120,6 +120,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.surface,
     padding: 16,
+  },
+  text: {
+    fontFamily: FONTS.bodyRegular,
+    color: COLORS.onSurface,
+  },
+  actionText: {
+    fontFamily: FONTS.headingSemiBold,
+    color: COLORS.primary,
   },
   // TODO: tambah styles sesuai desain Anda
 });

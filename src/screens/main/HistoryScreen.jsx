@@ -4,7 +4,7 @@ import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-import { ROUTES, COLORS } from '../../constants';
+import { ROUTES, COLORS, FONTS } from '../../constants';
 import { batches } from '../../data/batches';
 import { hitungSusut } from '../../utils/calculations';
 
@@ -186,20 +186,21 @@ const styles = StyleSheet.create({
   screenTitle: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
   screenSubtitle: {
     fontSize: 12,
     lineHeight: 16,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
   countText: {
     fontSize: 11,
     lineHeight: 14,
-    fontWeight: '600',
+    fontFamily: FONTS.bodySemiBold,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
   heroLabel: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: '500',
+    fontFamily: FONTS.bodyMedium,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontSize: 36,
     lineHeight: 44,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     letterSpacing: -0.5,
     color: COLORS.onSurface,
   },
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   susutText: {
     fontSize: 11,
     lineHeight: 14,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSecondary,
   },
 
@@ -272,13 +273,14 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
   sectionNote: {
     fontSize: 12,
     lineHeight: 16,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -325,7 +327,7 @@ const styles = StyleSheet.create({
 
   avatarText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
@@ -337,13 +339,14 @@ const styles = StyleSheet.create({
   batchName: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.headingSemiBold,
     color: COLORS.onSurface,
   },
 
   batchMeta: {
     fontSize: 12,
     lineHeight: 16,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -355,19 +358,20 @@ const styles = StyleSheet.create({
   resultValue: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     color: COLORS.onSurface,
   },
 
   initialWeight: {
     fontSize: 11,
     lineHeight: 14,
-    fontWeight: '600',
+    fontFamily: FONTS.bodySemiBold,
     color: COLORS.secondary,
   },
 
   emptyText: {
     fontSize: 12,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
     paddingVertical: 16,
   },

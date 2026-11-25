@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../../constants';
+import { COLORS, SIZES, FONTS } from '../../constants';
 
 const SensorRow = ({ sensor, onPress }) => {
 
@@ -106,12 +106,13 @@ const styles = StyleSheet.create({
 
     sensorName: {
         fontSize: SIZES.small,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.onSurface,
     },
 
     sensorDevice: {
         fontSize: SIZES.xSmall,
+        fontFamily: FONTS.bodyRegular,
         color: COLORS.onSurfaceVariant,
     },
 
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
 
     sensorValue: {
         fontSize: SIZES.small,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
         color: COLORS.onSurface,
     },
 
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
 
     statusText: {
         fontSize: SIZES.xSmall,
-        fontWeight: '600',
+        fontFamily: FONTS.bodySemiBold,
         textTransform: 'capitalize',
     },
 });

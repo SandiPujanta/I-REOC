@@ -10,7 +10,7 @@ import SensorScreen from '../screens/main/SensorScreen';
 import HistoryScreen from '../screens/main/HistoryScreen';
 import GuideBookScreen from '../screens/main/GuideBookScreen';
 import ProfileScreen from '../screens/main/ProfileScreen';
-import { ROUTES, COLORS } from '../constants';
+import { ROUTES, COLORS, FONTS } from '../constants';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +44,7 @@ const MainTabNavigator = () => {
         },
         tabBarLabelStyle: {
           fontSize: 11,
-          fontWeight: '600',
+          fontFamily: FONTS.headingSemiBold,
         },
         tabBarIcon: ({ focused, color }) => {
           const icons = TAB_ICONS[route.name] || { active: 'ellipse', inactive: 'ellipse-outline' };

@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES } from '../../constants';
+import { COLORS, SIZES, FONTS } from '../../constants';
 
 const HeroCard = ({
     fase,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     heroLabel: {
         color: '#9CA3AF',
         fontSize: 13,
-        fontWeight: '600',
+        fontFamily: FONTS.bodySemiBold,
         letterSpacing: 0.8,
     },
 
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     statusText: {
         color: COLORS.secondary,
         fontSize: 10,
-        fontWeight: '700',
+        fontFamily: FONTS.headingBold,
     },
 
     statusTextIdle: {
@@ -156,12 +156,13 @@ const styles = StyleSheet.create({
     phaseName: {
         color: COLORS.onPrimary,
         fontSize: 25,
-        fontWeight: '800',
+        fontFamily: FONTS.headingBold,
     },
 
     phaseNumber: {
         color: '#9CA3AF',
         fontSize: 12,
+        fontFamily: FONTS.bodyRegular,
     },
 
     progressBackground: {
@@ -184,13 +185,13 @@ const styles = StyleSheet.create({
     temperatureLabel: {
         color: '#9CA3AF',
         fontSize: 13,
-        fontWeight: '600',
+        fontFamily: FONTS.bodySemiBold,
     },
 
     temperatureValue: {
         color: COLORS.onPrimary,
         fontSize: 56,
-        fontWeight: '800',
+        fontFamily: FONTS.headingBold,
         marginTop: 2,
         fontVariant: ['tabular-nums'],
     },
@@ -198,12 +199,13 @@ const styles = StyleSheet.create({
     temperatureUnit: {
         color: COLORS.accent,
         fontSize: 25,
-        fontWeight: '600',
+        fontFamily: FONTS.headingSemiBold,
     },
 
     sensorInfo: {
         color: '#6B7280',
         fontSize: 11,
+        fontFamily: FONTS.bodyRegular,
     },
 
 });

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { ROUTES, COLORS, SIZES } from '../../constants';
+import { ROUTES, COLORS, SIZES, FONTS } from '../../constants';
 import { phases } from '../../data/phases';
 import { sensors } from '../../data/sensors';
 import { batches } from '../../data/batches';
@@ -362,12 +362,13 @@ const styles = StyleSheet.create({
 
   deviceName: {
     fontSize: SIZES.medium,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
   deviceId: {
     fontSize: SIZES.xSmall,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
@@ -397,12 +398,13 @@ const styles = StyleSheet.create({
 
   greetingLabel: {
     fontSize: SIZES.small,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
   userName: {
     fontSize: SIZES.large,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
@@ -425,8 +427,8 @@ const styles = StyleSheet.create({
 
   simulationText: {
     fontSize: SIZES.xSmall,
+    fontFamily: FONTS.bodySemiBold,
     color: COLORS.onSecondaryContainer,
-    fontWeight: '600',
   },
 
   // SECTION
@@ -443,12 +445,13 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: SIZES.large,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
     color: COLORS.primary,
   },
 
   sectionSubtitle: {
     fontSize: SIZES.xSmall,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
     marginTop: 4,
   },
@@ -463,7 +466,7 @@ const styles = StyleSheet.create({
   seeAllText: {
     color: COLORS.secondary,
     fontSize: SIZES.xSmall,
-    fontWeight: '700',
+    fontFamily: FONTS.headingBold,
   },
 
   sensorList: {
@@ -472,6 +475,7 @@ const styles = StyleSheet.create({
 
   emptyText: {
     fontSize: SIZES.small,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
     paddingVertical: SIZES.medium,
   },
@@ -487,6 +491,7 @@ const styles = StyleSheet.create({
 
   footerText: {
     fontSize: SIZES.xSmall,
+    fontFamily: FONTS.bodyRegular,
     color: COLORS.onSurfaceVariant,
   },
 
